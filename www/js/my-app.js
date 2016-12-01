@@ -24,6 +24,13 @@ myApp.onPageInit('about', function (page) {
     // Do something here for "about" page
 
 })
+//gmg
+// Option 1. Using page callback for page (for "about" page in this case) (recommended way):
+myApp.onPageInit('addpraktic', function (page) {
+    // Do something here for "addpraktic" page
+
+})
+//gmg
 
 // Option 2. Using one 'pageInit' event handler for all pages:
 $$(document).on('pageInit', function (e) {
