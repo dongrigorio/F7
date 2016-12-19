@@ -23,34 +23,30 @@ $$(document).on('deviceready', function () {
 
     //gmg
     
+    
+    var my_div = document.getElementById("page-content");  
+    
+    for (var i = 0; i < localStorage.length; i++) {
+    
     var cBlock = document.createElement("div");
     cBlock.className = "content-block";
-    cBlock.innerHTML = "Hello! ";
-/*    
-    for (var i = 0; i < localStorage.length; i++) {    
+        
         cBlock.innerHTML  = "<div class=\"card\">";
-        cBlock.innerHTML += "<div class=\"card-header\">";
-        cBlock.innerHTML += "!!!!!!!!!!!!!!!";
+        cBlock.innerHTML += "  <div class=\"card-header\">";
+        cBlock.innerHTML += "     lalalalala ";
+        cBlock.innerHTML += "  </div>";
+        cBlock.innerHTML += "  <div class=\"card-content\">";
+        cBlock.innerHTML += "    <div class=\"card-content-inner\">";
+        cBlock.innerHTML += "      Цель = 111.111";
+        cBlock.innerHTML += "      Выполнено = 9.000";
+        cBlock.innerHTML += "      Дата предыдущего подхода = 10.12.2011";
+        cBlock.innerHTML += "      <a href=\"#\" class=\"button button-big button-green\">Go!</a>";
+        cBlock.innerHTML += "     </div>";
+        cBlock.innerHTML += "  </div>";
         cBlock.innerHTML += "</div>";
-        cBlock.innerHTML += "<div class=\"card-content\">";
-        cBlock.innerHTML += "<div class=\"card-content-inner\">";
-        cBlock.innerHTML += "Цель = 111.111";
-        cBlock.innerHTML += "Выполнено = 9.000";
-        cBlock.innerHTML += "Дата предыдущего подхода = 10.12.2011";
-        cBlock.innerHTML += "<a href=\"#\" class=\"button button-big button-green\">Go!</a>";
-        cBlock.innerHTML += "</div>";
-        cBlock.innerHTML += "</div>";
-        cBlock.innerHTML += "</div>";
+        
+        my_div.insertBefore(cBlock,my_div.lastChild); 
     }
-    //cBlock.innerHTML += "</div>";
-    alertObj(cBlock);
-    //document.body.appendChild(contentBlock);
-*/
-    //alertObj(cBlock);
-    var my_div = document.getElementById("page-content");
-    
-    document.body.insertBefore(cBlock, my_div.firstChild);
-
 });
 
 // Now we need to run the code that will be executed only for About page.
