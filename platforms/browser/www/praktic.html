@@ -9,7 +9,7 @@
                 <span>Back</span>
             </a>
         </div>
-        <div class="center sliding">Добавить практику</div>
+        <div class="center sliding">Дополнить</div>
         <div class="right">
             <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
         </div>
@@ -17,34 +17,23 @@
 </div>
 
 <div class="pages">
-    <div data-page="addPraktic" class="page">
+    <div data-page="praktic" class="page">
         <div class="page-content">
             <div class="content-block">
                 
-                <form id="addPraktic" class="list-block">
+                <form id="dataPraktic" class="list-block">
                     
-                    <div class="content-block-title">Параметры</div>
+                    <div id="content-block-title" class="content-block-title">...</div>
                     <div class="list-block">
                       <ul>
                         <!-- Text inputs -->
-                        <li>
-                          <div class="item-content">
-                            <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
-                            <div class="item-inner">
-                              <div class="item-title label">Название</div>
-                              <div class="item-input">
-                                <input id="prakticName" name="prakticName" type="text" placeholder="Название практики">
-                              </div>
-                            </div>
-                          </div>
-                        </li>
                        <li>
                           <div class="item-content">
                             <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
                             <div class="item-inner">
-                              <div class="item-title label">Всего</div>
+                              <div class="item-title label">Повторений (раз)</div>
                               <div class="item-input">
-                                <input id="prakticLength" name="prakticLength" type="text" placeholder="Количество повторений">
+                                <input id="dataPrakticPieces" name="dataPrakticPieces" type="text" placeholder="Количество повторений">
                               </div>
                             </div>
                           </div>
@@ -53,9 +42,9 @@
                           <div class="item-content">
                             <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
                             <div class="item-inner">
-                              <div class="item-title label">В круге</div>
+                              <div class="item-title label">Повторений (кругов)</div>
                               <div class="item-input">
-                                <input id="prakticCircleLength" name="prakticCircleLength" type="text" placeholder="Повторений в одном круге">
+                                <input id="dataPrakticCircles" name="dataPrakticCircles" type="text" placeholder="Количество кругов">
                               </div>
                             </div>
                           </div>
