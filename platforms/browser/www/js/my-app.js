@@ -98,44 +98,13 @@ $$(document).on('deviceready', function () {
         my_div.insertBefore(cBlock,my_div.lastChild);  
     
     }
-    
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //разобраться нужно ли 
     $$('.go-praktic').on('click', function () {
          prakticId = event.target.type;
-        //alert(goToPraktic);
     });
     
 });
-/*
-gmg вариант 0
-    var my_div = document.getElementById("page-content");  
-    
-    for (var i = 0; i < localStorage.length; i++) {
-    
-    var cBlock = document.createElement("div");
-    cBlock.className = "content-block";
-        
-        cBlock.innerHTML  = "<div class=\"card\">";
-        cBlock.innerHTML += "  <div class=\"card-header\">";
-        cBlock.innerHTML += "     lalalalala ";
-        cBlock.innerHTML += "  </div>";
-        cBlock.innerHTML += "  <div class=\"card-content\">";
-        cBlock.innerHTML += "    <div class=\"card-content-inner\">";
-        cBlock.innerHTML += "      Цель = 111.111";
-        cBlock.innerHTML += "      Выполнено = 9.000";
-        cBlock.innerHTML += "      Дата предыдущего подхода = 10.12.2011";
-        cBlock.innerHTML += "      <a href=\"#\" class=\"button button-big button-green\">Go!</a>";
-        cBlock.innerHTML += "     </div>";
-        cBlock.innerHTML += "  </div>";
-        cBlock.innerHTML += "</div>";
-        
-        my_div.insertBefore(cBlock,my_div.lastChild); 
-    }
-});
-
-
-*/
-
-
    
 //gmg
 myApp.onPageInit('addPraktic', function (page) {
@@ -158,9 +127,15 @@ myApp.onPageInit('addPraktic', function (page) {
 
 myApp.onPageInit('praktic', function (page) {
     var prakticData=JSON.parse(localStorage.getItem(prakticId));
+
+    
     
     var my_div = document.getElementById("content-block-title");  
     my_div.innerHTML = prakticData["prakticName"];  
+    
+    my_div = document.getElementById("circle-length"); 
+    my_div.innerHTML = "<p>Установлена длина одного круга <b>" + prakticData["prakticCircleLength"] + "</b> </p>"; 
+    
     
     $$('.cancel-data').on('click', function () {
         location.href="index.html";
@@ -181,8 +156,45 @@ myApp.onPageInit('praktic', function (page) {
             */
             //alertObj(prakticData);
             localStorage.setItem(prakticId, JSON.stringify(prakticData));
-            alert('Данные сохранены');
+            alert("Данные сохранены");
             location.href="index.html";
+        }
+    });
+});
+
+myApp.onPageInit('editpraktic', function (page) {
+    var prakticData=JSON.parse(localStorage.getItem(prakticId));
+
+    
+    
+    var my_div = document.getElementById("content-block-title");  
+    my_div.innerHTML = prakticData["prakticName"];  
+    
+    my_div = document.getElementById("circle-length"); 
+    my_div.innerHTML = "<p>Установлена длина одного круга <b>" + prakticData["prakticCircleLength"] + "</b> </p>"; 
+    
+    
+    $$('.cancel-data').on('click', function () {
+        location.href="index.html";
+    });
+    
+    $$('.save-data').on('click', function () {
+        var formData = myApp.formToJSON('#dataPraktic');
+        if ((+formData.dataPrakticPieces >0) || (+formData.dataPrakticCircles >0)) {
+           
+            prakticData.dataPrakticPieces += "+" + (+formData.dataPrakticPieces + (+formData.dataPrakticCircles * +prakticData["prakticCircleLength"]))
+            + ":"
+            + +new Date;
+            
+            /*
+            prakticData.dataPrakticPieces += "+" + (+formData.dataPrakticPieces + (+formData.dataPrakticCircles * +prakticData["prakticCircleLength"]));
+            
+             prakticData.dataPrakticDate += "+" + +new Date;           
+            */
+            //alertObj(prakticData);
+            //localStorage.setItem(prakticId, JSON.stringify(prakticData));
+            alert("Данные сохранены");
+            //location.href="index.html";
         }
     });
 });
