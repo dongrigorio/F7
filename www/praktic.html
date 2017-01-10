@@ -33,7 +33,7 @@
                             <div class="item-inner">
                               <!--div class="item-title label">Повторений (раз)</div-->
                               <div class="item-input">
-                                <input id="dataPrakticPieces" name="dataPrakticPieces" type="text" placeholder="Количество повторений">
+                                <input id="dataPrakticPieces" name="dataPrakticPieces" type="number" placeholder="Количество повторений" required pattern="^[0-9]+$">
                               </div>
                             </div>
                           </div>
@@ -44,7 +44,7 @@
                             <div class="item-inner">
                               <!--div class="item-title label">Повторений (кругов)</div-->
                               <div class="item-input">
-                                <input id="dataPrakticCircles" name="dataPrakticCircles" type="text" placeholder="Количество кругов">
+                                <input id="dataPrakticCircles" name="dataPrakticCircles" type="number" placeholder="Количество кругов" required pattern="^[0-9]+$">
                               </div>
                             </div>
                           </div>
@@ -55,7 +55,9 @@
                 <div class="list-block-label">
                     <p><a href="#" class="button alert-text-title save-data-praktic">Сохранить</a></p>
                     <!--p><a href="#" class="button cancel-data">Отменить</a></p-->
-                </div>                
+                </div>        
+                                
+                <div class="ct-chart-day ct-perfect-fourth"> </div>
                 
                 <div class="list-block-label" id="circle-length">
                     ...
