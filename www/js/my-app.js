@@ -22,14 +22,61 @@ function alertObj(obj) {
     } 
     alert(str); 
 } 
+// database test!!!!!!!!!!!!!!
+function populateDB(tx) {
+     tx.executeSql('DROP TABLE IF EXISTS DEMO');
+     tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, data)');
+     tx.executeSql('INSERT INTO DEMO (id, data) VALUES (1, "First row")');
+     tx.executeSql('INSERT INTO DEMO (id, data) VALUES (2, "Second row")');
+
+}
+
+function errorCB(err) {
+    alert("Error processing SQL: "+err.code);
+}
+
+function successCB() {
+    //alert("success!");
+    return;
+}
+
+function testDB() {
+    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+    db.transaction(populateDB, errorCB, successCB);
+    
+    db.transaction(function (tx) {
+        tx.executeSql('SELECT id,DATA FROM DEMO WHERE id =1', [], function (tx, results) {
+        var len = results.rows.length, i;
+        console.log( "Found rows: " + len );
+          for (i = 0; i < len; i++){
+             console.log(results.rows.item(i) );
+              //console.log(results.rows.item(i).data );
+          }
+        }, null);
+    });    
+    return 1;
+}
+// database test!!!!!!!!!!!!!!
+
+function utf8_to_b64(str) {
+    return window.btoa(unescape(encodeURIComponent(str)));
+}
+
+function b64_to_utf8(str) {
+    return decodeURIComponent(escape(window.atob(str)));
+}
+
 
 myApp.onPageInit('*', function (page) {
-  console.log(page.name + ' initialized'); 
+    console.log(page.name + ' initialized'); 
 });
 
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
     console.log("Device is ready!");
+    //alertObj(navigator);
+    // database test!!!!!!!!!!!!!!
+    console.log("testDB = " + testDB() + " =");
     indexPage.trigger();
     
 });
@@ -174,26 +221,71 @@ myApp.onPageInit('addPraktic', function (page) {
         var formData = myApp.formToJSON('#addPraktic');
         formData["prakticSum"] = "";
         formData["prakticPieces"] = ""; 
-                
-        //alertObj(formData);
         localStorage.setItem(prakticId, JSON.stringify(formData));
         myApp.alert('Данные сохранены',"addPraktic");
-        //indexPage.trigger();  
-        //mainView.router.refresh.previusPage();
-        //mainView.router.refreshPreviousPage();
-        //mainView.router.back({
-        //    pageName: "index"
-        //});
-        
-        //mainView.router.refreshPage();
+
         location.href="index.html";
     });
 });
+
+myApp.onPageInit('backup', function (page) {
+
+
+    
+    $$('.cancel-data').on('click', function () {
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+        //location.href="index.html";
+    });
+    
+    $$('.save-data-backup').on('click', function () {
+        
+        var formData = myApp.formToJSON('#backupForm');
+        
+        if (backupForm["mailTo"] > "") {
+            var webUri = "http://geo-format.ru/1.html?a=" + utf8_to_b64(backupForm["mailTo"]) + "&oper=get&rnd=" + Math.random() ;
+            
+            alert(webUri);
+            
+            // toWebServer = utf8_to_b64("http://geo-format.ru/1.html?a=");
+            // toWebServer = b64_to_utf8(toWebServer);
+
+            // open WEB      
+            var x = new XMLHttpRequest();
+            x.open("GET", webUri, true);
+            x.onload = function (){
+                alert( x.responseText);
+            }
+            x.send(null);
+            // open WEB   
+        }   
+        
+        
+        
+        /*
+        var formData = myApp.formToJSON('#addPraktic');
+        formData["prakticSum"] = "";
+        formData["prakticPieces"] = ""; 
+        localStorage.setItem(prakticId, JSON.stringify(formData));
+        myApp.alert('Данные сохранены',"addPraktic");
+
+        location.href="index.html";
+        
+        */
+    });
+});
+
+
+
+
+
+
 
 var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     console.log("= "+prakticId + " = prakticId");
     var prakticData = JSON.parse(localStorage.getItem(prakticId));
     var date = new Date();
+    var my_div;
+    
     var my_div = document.getElementById("content-block-title");  
         my_div.innerHTML = prakticData["prakticName"];     
     
@@ -212,7 +304,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     pieceDate=[];
     var str = "<p>Установлена длина одного круга <b>" + prakticData["prakticCircleLength"] + "</b> </p>";
     
-
+ 
     if (prakticData.prakticPieces.length > 0){
         
         var arr = prakticData.prakticPieces.split("=");
@@ -242,11 +334,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
         
         
     }   
-     
-    
-    
-    
-    
+
     new Chartist.Bar('.ct-chart-day', {
       labels: labels1,
       series: [series1]
@@ -260,17 +348,10 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
       }
         
     });
-    
-    
- 
+
     my_div = document.getElementById("circle-length"); 
     my_div.innerHTML = str;
-    /* 
-    $$('.cancel-data').on('click', function () {
 
-        mainView.router.refreshPreviousPage();
-    });
-    */
     
     $$('.save-data-praktic').on('click', function () {
         var formData = myApp.formToJSON('#dataPraktic');
@@ -299,43 +380,45 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
             + +new Date();
 
             localStorage.setItem(prakticId, JSON.stringify(prakticData));
-            //myApp.alert("Данные сохранены", "praktic");
+
             mainView.router.refreshPage();
         }
     });
     
     $$('.delete-last-data').on('click', function () {
-        if (piecePraktic.length>0) {
-            myApp.confirm("Удалить ?","", function () {
-            
-                prakticData.prakticSum = +prakticData.prakticSum - +piecePraktic[piecePraktic.length-1];
+        
+            if (piecePraktic.length > 0) {
+                myApp.confirm("Удалить ?","", function () {
 
-                console.log("1:  piecePraktic.length =" + piecePraktic.length); 
+                    prakticData.prakticSum = +prakticData.prakticSum - +piecePraktic[piecePraktic.length-1];
 
-                piecePraktic.splice(piecePraktic.length-1, 1);
-                pieceDate.splice(pieceDate.length-1, 1);  
+                    console.log("1:  piecePraktic.length =" + piecePraktic.length); 
 
-                console.log("2:  DEL piecePraktic.length =" + piecePraktic.length); 
+                    piecePraktic.splice(piecePraktic.length-1, 1);
+                    pieceDate.splice(pieceDate.length-1, 1);  
 
-                prakticData.prakticPieces = "";
+                    console.log("2:  DEL piecePraktic.length =" + piecePraktic.length); 
 
-                if ((piecePraktic.length)>0){
-                    for (j=0; j<piecePraktic.length; j++) {
-                        prakticData.prakticPieces += piecePraktic[j]
-                        + ":"
-                        + pieceDate[j]
-                        + "=";       
+                    prakticData.prakticPieces = "";
+
+                    if ((piecePraktic.length)>0){
+                        for (j=0; j<piecePraktic.length; j++) {
+                            prakticData.prakticPieces += piecePraktic[j]
+                            + ":"
+                            + pieceDate[j]
+                            + "=";       
+                        }
                     }
-                }
-                //отрезаем последнее равно
-                prakticData.prakticPieces = prakticData.prakticPieces.substring(0,  prakticData.prakticPieces.length-1);
-                console.log("prakticData.prakticPieces =" + prakticData.prakticPieces);
+                    //отрезаем последнее равно
+                    prakticData.prakticPieces = prakticData.prakticPieces.substring(0,  prakticData.prakticPieces.length-1);
+                    console.log("prakticData.prakticPieces =" + prakticData.prakticPieces);
 
-                localStorage.setItem(prakticId, JSON.stringify(prakticData));
-                //myApp.alert("Последняя сессия удалена", "");
+                    localStorage.setItem(prakticId, JSON.stringify(prakticData));
+                    //myApp.alert("Последняя сессия удалена", "");
 
-                mainView.router.refreshPage();
-            });
+                    mainView.router.refreshPage();
+                });
+
         } else {
             myApp.alert("Нет данных для удаления", "");
             mainView.router.refreshPage();

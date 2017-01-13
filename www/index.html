@@ -2,6 +2,13 @@
 <html>
 <head>
     <!--
+
+google oAuth
+https://developers.google.com/identity/protocols/OAuth2UserAgent
+
+https://accounts.google.com/o/oauth2/v2/auth?client_id=1032177642651-me7bi1qgjrb4utfjkjvi3j38rsf4nvlt.apps.googleusercontent.com&response_type=token&scope=profile&redirect_uri=http%3A%2F%2Flocalhost:3000
+
+
         Customize this policy to fit your own app's needs. For more guidance, see:
             https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
         Some notes:
@@ -10,7 +17,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' geo-format.ru data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
 
     <!-- Required meta tags-->
     <meta charset="utf-8">
@@ -47,6 +54,7 @@
         <div class="content-block">
             <!--p>Left panel content goes here</p-->
 		<p><a href="addpraktic.html" class="button button-big">Добавить практику</a></p>
+        <p><a href="backup.html" class="button button-big">Резервное копирование</a></p>
 		<!--p><a href="#" class="button button-big">Preferences</a></p-->  
         </div>
     </div>
