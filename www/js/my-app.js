@@ -6,8 +6,9 @@ console.log("go!");
 var $$ = Dom7;
 var prakticId = "";
 var piecePraktic = [];
-var pieceDate =[];
-var i = j = 0;
+var pieceDate = [];
+var i, j = 0;
+var settings ={};
 
 // Add view
 var mainView = myApp.addView('.view-main', {
@@ -17,6 +18,7 @@ var mainView = myApp.addView('.view-main', {
 
 function alertObj(obj) {
     var str = "";
+    var k;
     for (k in obj) {
         str += k + ": " + obj[k] + "\r\n";
     } 
@@ -81,130 +83,106 @@ $$(document).on('deviceready', function () {
     
 });
    
-//gmg
 var indexPage = myApp.onPageInit('index', function (page) {
+    //читаем переменную с настройками, и если нужно - создаем ее заново в локалсторейдже
+
+    if (localStorage.getItem("settings") == null) { 
+        settings = {email:"", pin:"", registered:"0"};
+        localStorage.setItem("settings", JSON.stringify(settings));
+        myApp.alert("Добро пожаловать","");
+    } else {
+        settings = JSON.parse(localStorage.getItem("settings"));
+    }
     
-     var key;
-    //gmg- формируем первую страницу
+    var key;
+    //формируем первую страницу
+
     for (key in localStorage) { 
 
         //читаем данные из хранилища чтобы показать на 1 странице
         // на каждую практику в локалсторадже заводится ОДНА строка
-    
-        var prakticData=JSON.parse(localStorage.getItem(key));
-        
-        var cBlock = document.createElement("div");
-        cBlock.className = "content-block";  
-    
-        var cBlock1 = document.createElement("div");
-        cBlock1.className = "card";
-       
-        var cBlock2 = document.createElement("div");
-        cBlock2.className = "card-header";
-        cBlock2.innerHTML = prakticData.prakticName;
-    
-        var cBlock3 = document.createElement("div");
-        cBlock3.className = "card-content";
-         
-        var cBlock4 = document.createElement("div");
-        cBlock4.className = "card-content-inner";
-          
-        cBlock4.innerHTML = "<p>Цель = <b>" + prakticData.prakticLength + "</b></p>"
-            + "<p>Выполнено = <b>" + prakticData.prakticSum + "</b></p>"
-            //+ "<p>% выполнения = <b>" + (prakticData.prakticSum/prakticData.prakticLength * 100 ^ 0) + "</b></p>"
-            + "<p><a href=\"praktic.html\" class=\"button button-big go-praktic\" type=\""
-            + key
-            + "\">Go!</a></p>";
-        
-        //alert(cBlock4.innerHTML);
-        
-        var cBlock6 = document.createElement("a");
-        cBlock6.setAttribute("href", "praktic.html");
-        cBlock6.setAttribute("class", "go-praktic-2");
-        cBlock6.setAttribute("type", key);
-        
-        
-        var cBlock5 = document.createElement("div");
-        cBlock5.className = "ct-chart ct-double-octave";
-        cBlock5.innerHTML = "<style type=\"text/css\">"
-                        +   ".ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {stroke: #39E639;}"
-                        +   ".ct-series-b .ct-bar, .ct-series-b .ct-line, .ct-series-b .ct-point, .ct-series-b .ct-slice-donut {stroke: #FF4040;}"
-                        +   "</style>";
+        if (key != "settings") {
+            var prakticData=JSON.parse(localStorage.getItem(key));
 
-        //сделано в %
-        var piecesDone = +prakticData.prakticSum/+prakticData.prakticLength * 100 ^ 0;
-        
-        // осталось сделать в %
-        var picesDo;
-        
-        if (piecesDone >100) {
-            piecesDone =100;
-        }
-        // осталось в %
-        (+piecesDone >0) ? (piecesDo = 100 - +piecesDone):( piecesDo = 100);
-        /*
-        new Chartist.Pie(cBlock5, {
-          labels: ['Сделано', ''],
-          series: [+piecesDone, +piecesDo]
-        }, {
-            donut: true,
-            donutWidth: 30,
-            startAngle: 270,
-            total: 0,
-            showLabel: false,
-            horizontalBars: true,
-            color: "green",
+            var cBlock = document.createElement("div");
+            cBlock.className = "content-block";  
 
-            chartPadding: 30,
-            //labelOffset: -100,
-            //labelDirection: 'explode'
-        });
-        
-        
-        */
-        new Chartist.Bar(cBlock5, {
-          labels: ['', ''],
-          series: [ [+piecesDone], [+piecesDo]]
-        }, {
-          stackBars: true,
-          horizontalBars: true,
-          chartPadding: 15,
-            seriesBarDistance: 100,
-            axisY: {
-                offset:10,
-                padding: 100,
-                position: 200
-            },
-            axisY: {
-               offset:10,
-                padding: 100,
-                position: 200
+            var cBlock1 = document.createElement("div");
+            cBlock1.className = "card";
+
+            var cBlock2 = document.createElement("div");
+            cBlock2.className = "card-header";
+            cBlock2.innerHTML = prakticData.prakticName;
+
+            var cBlock3 = document.createElement("div");
+            cBlock3.className = "card-content";
+
+            var cBlock4 = document.createElement("div");
+            cBlock4.className = "card-content-inner";
+
+            cBlock4.innerHTML = "<p>Цель = <b>" + prakticData.prakticLength + "</b></p>"
+                + "<p>Выполнено = <b>" + prakticData.prakticSum + "</b></p>"
+                + "<p><a href=\"praktic.html\" class=\"button button-big go-praktic\" id=\"go-praktic\" type=\""
+                + key
+                + "\">Go!</a></p>";
+
+            var cBlock5 = document.createElement("div");
+            cBlock5.className = "ct-chart ct-double-octave";
+            cBlock5.innerHTML = "<style type=\"text/css\">"
+                            +   ".ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {stroke: #39E639;}"
+                            +   ".ct-series-b .ct-bar, .ct-series-b .ct-line, .ct-series-b .ct-point, .ct-series-b .ct-slice-donut {stroke: #FF4040;}"
+                            +   "</style>";
+
+            //сделано в %
+            var piecesDone = +prakticData.prakticSum/+prakticData.prakticLength * 100 ^ 0;
+
+            // осталось сделать в %
+            var picesDo;
+
+            if (piecesDone >100) {
+                piecesDone = 100;
             }
-        });
-        
-        
-        //cBlock6.appendChild(cBlock5);
-        cBlock4.appendChild(cBlock5); 
-        cBlock3.appendChild(cBlock4);    
-        cBlock1.appendChild(cBlock2);
-        cBlock1.appendChild(cBlock3);
-        cBlock.appendChild(cBlock1);       
-        
-        var my_div = document.getElementById("page-content");  
-        my_div.appendChild(cBlock);
-        
+            // осталось в %
+            (+piecesDone >0) ? (piecesDo = 100 - +piecesDone):( piecesDo = 100);
+
+            new Chartist.Bar(cBlock5, {
+              labels: ['', ''],
+              series: [ [+piecesDone], [+piecesDo]]
+            }, {
+              stackBars: true,
+              horizontalBars: true,
+              chartPadding: 15,
+                seriesBarDistance: 100,
+                axisY: {
+                    offset:10,
+                    padding: 100,
+                    position: 200
+                },
+                axisY: {
+                    offset:10,
+                    padding: 100,
+                    position: 200
+                }
+            });
+
+            cBlock4.appendChild(cBlock5); 
+            cBlock3.appendChild(cBlock4);    
+            cBlock1.appendChild(cBlock2);
+            cBlock1.appendChild(cBlock3);
+            cBlock.appendChild(cBlock1);       
+
+            var my_div = document.getElementById("page-content");  
+            my_div.appendChild(cBlock);
+        }
     }
     
-    //в параметер type лежит ключ к данным в ЛокалСторейдже
-    $$('.go-praktic').on('click', function () {
-        prakticId = event.target.getAttribute("type"); // type;
-       
-    });  
-
+    //в параметре type лежит ключ к данным в ЛокалСторейдже
+    $$('.go-praktic').on('click', function () {        
+        var target = event ? event.target : window.event.srcElement;
+        prakticId = target.type;
+    });        
+    
 });
-
-
-
 
 myApp.onPageInit('addPraktic', function (page) {
     // Do something here for "addpraktic" page
@@ -228,13 +206,49 @@ myApp.onPageInit('addPraktic', function (page) {
     });
 });
 
-myApp.onPageInit('backup', function (page) {
-
+var backupPage = myApp.onPageInit('backup', function (page) {
+    //settings.registered = "0";
+    //есть регистрация
+    if (settings.registered == "3"){
+            var my_div = document.getElementById("registered-3");  
+            my_div.hidden = false;   
+    }
+    
+    //нет регистрации  пинкод неверен, запрашиваем повторно
+    if (settings.registered == "2"){
+            var my_div = document.getElementById("registered-1");  
+            my_div.hidden = true;  
+            var my_div = document.getElementById("registered-2");  
+            my_div.hidden = false;   
+    }
+    
+    //нет регистрации запрашиваем пинкод
+    if (settings.registered == "1"){
+            var my_div = document.getElementById("registered-0");  
+            my_div.hidden = true;         
+            var my_div = document.getElementById("registered-1");  
+            my_div.hidden = false;   
+    }
+    
+    //нет регистрации. запрашиваем имейл
+    if (settings.registered == "0"){
+            var my_div = document.getElementById("registered-0");  
+            my_div.hidden = false;           
+    }
     
     $$('.cancel-data').on('click', function () {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //location.href="index.html";
     });
+
+    $$('.registered-0').on('click', function () {
+        settings.registered = "1";
+        backupPage.trigger();
+        
+    
+    });    
+    
+    
     
     $$('.save-data-backup').on('click', function () {
         
@@ -243,16 +257,11 @@ myApp.onPageInit('backup', function (page) {
         if (backupForm["mailTo"] > "") {
            
             var webUri = "http://geo-format.ru/index.php?id=91&a=" + utf8_to_b64(backupForm["mailTo"]) + "&oper=get&rnd=" + Math.random() ;
-            //var webUri = "http://geo-format.ru/1.html?id=91&a=" + utf8_to_b64(backupForm["mailTo"]) + "&oper=get&rnd=" + Math.random() ;            
             alert(webUri);
-            
-            // toWebServer = utf8_to_b64("http://geo-format.ru/1.html?a=");
-            // toWebServer = b64_to_utf8(toWebServer);
 
             // open WEB      
             var x = new XMLHttpRequest();
             x.open("GET", webUri, true);
-            //x.send(params);
             x.onload = function (){
                 alert( x.responseText);
             }
@@ -283,7 +292,7 @@ myApp.onPageInit('backup', function (page) {
 
 var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     console.log("= "+prakticId + " = prakticId");
-    var prakticData = JSON.parse(localStorage.getItem(prakticId));
+    var prakticData = JSON.parse(localStorage[prakticId]);
     var date = new Date();
     var my_div;
     
@@ -328,12 +337,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
         
         date.setTime(+pieceDate[arr.length-1]- +pieceDate[0] + 5*1000*60*60*24);
         var periodDate = (date/ 24 / 60 / 60 / 1000 )^0;
-        
-        //for (i=periodDate; i>=0; i--){
-            
-           //if !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        
-        
+    
     }   
 
     new Chartist.Bar('.ct-chart-day', {

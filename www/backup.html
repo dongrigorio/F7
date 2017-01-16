@@ -9,7 +9,7 @@
                 <span>На главную</span>
             </a>
         </div>
-        <div class="center sliding">Добавить практику</div>
+        <div class="center sliding">Резервное копирование</div>
         <div class="right">
             <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
         </div>
@@ -19,8 +19,98 @@
 <div class="pages">
     <div data-page="backup" class="page">
         <div class="page-content">
-            <div class="content-block">
-                
+            
+            <div id="registered-0" class="content-block" hidden="hidden">
+                no-registered
+                <form id="backupForm" class="list-block">
+                    
+                    <div class="content-block-title">Регистрация, шаг 1</div>
+                    <div class="list-block">
+                      <ul>
+                        <li>
+                          <div class="item-content">
+                             <div class="item-inner">
+                                Зарегистрируйтесь на сервере хранения для резервирования и синхронизации данных между вашими устройствами. 
+                                Для этого укажите вашу электронную почту и получите код подтверждения.
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
+                            <div class="item-inner">
+
+                              <!--div class="item-title label">Email</div-->
+                              <div class="item-input">
+                                <input id="mailTo" name="mailTo" type="email" placeholder="адрес электронной почты" pattern="/.+@.+\..+/i" required>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                     </ul>
+                    </div>
+                </form>
+                <div class="content-block">
+                  <p><a href="#" class="button registered-0">Запросить регистрационный код</a></p>
+                </div>
+
+            </div>            
+
+            <div id="registered-1" class="content-block" hidden="hidden">
+                registered-1
+                <form id="backupForm" class="list-block">
+                    
+                    <div class="content-block-title">Регистрация, шаг2</div>
+                    <div class="list-block">
+                      <ul>
+                        <li>
+                          <div class="item-content">
+                             <div class="item-inner">
+                                Введите ваш Email
+                            </div>
+                          </div>
+                          <div class="item-content">
+                            <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
+                            <div class="item-inner">
+
+                              <!--div class="item-title label">Email</div-->
+                              <div class="item-input">
+                                <input id="mailTo" name="mailTo" type="email" placeholder="адрес электронной почты" pattern="/.+@.+\..+/i" required>
+                              </div>
+                            </div>
+                          </div>
+                        </li>                          
+                        <li>
+                          <div class="item-content">
+                             <div class="item-inner">
+                                Введите ваш регистрационный код
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
+                            <div class="item-inner">
+
+                              <!--div class="item-title label">Email</div-->
+                              <div class="item-input">
+                                <input id="regcode" name="regcode" type="number" placeholder="регистрационный код" required pattern="^[0-9]+$">
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                     </ul>
+                    </div>
+                </form>
+                <div class="content-block">
+                    <p><a href="#" class="button registered-1">Подтвердить</a></p>
+                </div>
+
+            </div>             
+            
+            
+            <div id="registered-3" class="content-block" hidden="hidden">
+                registered
                 <form id="backupForm" class="list-block">
                     
                     <div class="content-block-title">Введите ваш Email </div>
