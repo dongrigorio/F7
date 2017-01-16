@@ -230,7 +230,6 @@ myApp.onPageInit('addPraktic', function (page) {
 
 myApp.onPageInit('backup', function (page) {
 
-
     
     $$('.cancel-data').on('click', function () {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
@@ -239,11 +238,12 @@ myApp.onPageInit('backup', function (page) {
     
     $$('.save-data-backup').on('click', function () {
         
-        var formData = myApp.formToJSON('#backupForm');
+        var backupForm = myApp.formToJSON('#backupForm');
         
         if (backupForm["mailTo"] > "") {
-            var webUri = "http://geo-format.ru/1.html?a=" + utf8_to_b64(backupForm["mailTo"]) + "&oper=get&rnd=" + Math.random() ;
-            
+           
+            var webUri = "http://geo-format.ru/index.php?id=91&a=" + utf8_to_b64(backupForm["mailTo"]) + "&oper=get&rnd=" + Math.random() ;
+            //var webUri = "http://geo-format.ru/1.html?id=91&a=" + utf8_to_b64(backupForm["mailTo"]) + "&oper=get&rnd=" + Math.random() ;            
             alert(webUri);
             
             // toWebServer = utf8_to_b64("http://geo-format.ru/1.html?a=");
@@ -252,6 +252,7 @@ myApp.onPageInit('backup', function (page) {
             // open WEB      
             var x = new XMLHttpRequest();
             x.open("GET", webUri, true);
+            //x.send(params);
             x.onload = function (){
                 alert( x.responseText);
             }
