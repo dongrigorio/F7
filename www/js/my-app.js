@@ -207,7 +207,7 @@ myApp.onPageInit('addPraktic', function (page) {
 });
 
 var backupPage = myApp.onPageInit('backup', function (page) {
-    //settings.registered = "0";
+    
     //есть регистрация
     if (settings.registered == "3"){
             var my_div = document.getElementById("registered-3");  
@@ -242,7 +242,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
     });
 
     $$('.registered-0').on('click', function () {
-        settings.registered = "1";
+        //settings.registered = "1";
         backupPage.trigger();
         
         var backupForm = myApp.formToJSON('#registered-0');
