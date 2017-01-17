@@ -245,28 +245,31 @@ var backupPage = myApp.onPageInit('backup', function (page) {
         settings.registered = "1";
         backupPage.trigger();
         
-    
-    });    
-    
-    
-    
-    $$('.save-data-backup').on('click', function () {
-        
-        var backupForm = myApp.formToJSON('#backupForm');
+        var backupForm = myApp.formToJSON('#registered-0');
         
         if (backupForm["mailTo"] > "") {
            
-            var webUri = "http://geo-format.ru/index.php?id=91&a=" + utf8_to_b64(backupForm["mailTo"]) + "&oper=get&rnd=" + Math.random() ;
-            alert(webUri);
-
+            //var webUri = "http://geo-format.ru/index.php?id=91&a=" + utf8_to_b64(backupForm["mailTo"]) + "&oper=get&rnd=" + Math.random() ;
+            var webUri = "http://geo-format.ru/index.php?id=91&a=" 
+                            + backupForm["mailTo"] 
+                            + "&oper=" + settings.registered 
+                            + "&rnd=" + Math.random() ;
+            
+            console.log("webUri= " + webUri);
             // open WEB      
             var x = new XMLHttpRequest();
             x.open("GET", webUri, true);
+            x.send();
             x.onload = function (){
-                alert( x.responseText);
+               // alert(x.responseText);
+                console.log(x.responseText);
+                var resp1 = x.responseText.indexOf("<response>",0);
+                var resp2 = x.responseText.indexOf("</response>",resp1+1);
+                var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split(",")
+                console.log(resp3);
             }
-            x.send(null);
-            // open WEB   
+
+           // open WEB   
         }   
         
         
@@ -299,16 +302,16 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     var my_div = document.getElementById("content-block-title");  
         my_div.innerHTML = prakticData["prakticName"];     
     
-    var options = {
+    var optionsDate = {
      // era: 'long',
       year: '2-digit',
       month: 'short',
-      day: 'numeric',
+      day: '2-digit'
       //weekday: 'long',
       //timezone: 'UTC',
-      //hour: 'numeric',
-      //minute: 'numeric',
-      //second: 'numeric'
+      //hour: '2-digit',
+      //minute: '2-digit',
+      //second: '2-digit'
     };
     piecePraktic=[]; 
     pieceDate=[];
@@ -321,16 +324,17 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
         var labels1 = [], series1 = [];
         var k;
         k = 0;
-        for (i=arr.length-1; i>=0; i--){
+
+        for (i=0; i<arr.length; i++){
             var dataKey = arr[i].indexOf(":",0); //определили позицию разделителя
                 piecePraktic[i] = arr[i].substring(0,dataKey); //выделили кол-во повторений
                 pieceDate[i] = arr[i].substring(dataKey+1,arr[i].length); //выделили дату-время
                 date.setTime(pieceDate[i]);
-               // str += "<br>" + date.toLocaleString("ru-RU", options) +  " : " + piecePraktic[i] +" ";
-                labels1[i] = date.toLocaleString('en-GB', options);
+                labels1[i] = date.toLocaleString('en-GB', optionsDate); //'en-GB'
                 series1[i] = +piecePraktic[i];
                 k += +piecePraktic[i];
         }
+                
         str += "<p>Среднее количеcтво повторений за одну сессию:  " + ((+k/(arr.length-1))^0);
         str += "<p>Для достижения цели потребуется приблизительно " + ( (+prakticData.prakticLength - +prakticData.prakticSum)/(+k/(arr.length-1))^0  ) + " сессий.";
         str += " </p>";        
@@ -339,18 +343,15 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
         var periodDate = (date/ 24 / 60 / 60 / 1000 )^0;
     
     }   
-
+    
     new Chartist.Bar('.ct-chart-day', {
       labels: labels1,
       series: [series1]
     }, {
-      //seriesBarDistance: 10,
-      reverseData: true,
-      Width: 60,
-      horizontalBars: true,
-      axisY: {
-        offset: 70
-      }
+        horizontalBars: true,
+        axisY: {
+           offset: 70
+        }
         
     });
 
