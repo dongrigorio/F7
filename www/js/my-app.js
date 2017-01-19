@@ -207,7 +207,7 @@ myApp.onPageInit('addPraktic', function (page) {
 });
 
 var backupPage = myApp.onPageInit('backup', function (page) {
-    //settings.registered = "0";
+    
     //есть регистрация
     var resp1, resp2;
     var resp3 = [];
@@ -260,6 +260,10 @@ var backupPage = myApp.onPageInit('backup', function (page) {
     }
 
     $$('.registered-0').on('click', function () {
+
+        //settings.registered = "1";
+        backupPage.trigger();
+        
         var backupForm = myApp.formToJSON('#registered-0');
         
         if (backupForm["mailTo"] > "") {
