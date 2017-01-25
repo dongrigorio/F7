@@ -21,7 +21,6 @@
         <div class="page-content">
             
             <div id="registered-0" class="content-block" hidden="hidden">
-                no-registered
                 <form id="registered-0" class="list-block">
                     
                     <div class="content-block-title">Регистрация, шаг 1</div>
@@ -30,8 +29,13 @@
                         <li>
                           <div class="item-content">
                              <div class="item-inner">
-                                Зарегистрируйтесь на сервере хранения для резервирования и синхронизации данных между вашими устройствами. 
-                                Для этого укажите вашу электронную почту и получите код подтверждения.
+                                 <div class="item-input">
+                                    <p>Зарегистрируйтесь на сервере хранения для резервирования и синхронизации данных между вашими устройствами. 
+                                        Для этого укажите вашу электронную почту и получите код подтверждения. </p>
+                                     <p>
+                                        Если ваш email уже есть в базе, регистрационный код будет выслан вам повторно.
+                                     </p>
+                                 </div>
                             </div>
                           </div>
                         </li>
@@ -42,7 +46,28 @@
 
                               <!--div class="item-title label">Email</div-->
                               <div class="item-input">
-                                <input id="mailTo" name="mailTo" type="email" placeholder="адрес электронной почты" pattern="/.+@.+\..+/i" required>
+                                <p><input id="mailTo" name="mailTo" type="email" placeholder="адрес электронной почты" pattern="/.+@.+\..+/i" required></p>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
+                            <div class="item-inner">
+
+                              <!--div class="item-title label">Email</div-->
+                              <div class="item-input">
+                                <p><a href="#" class="button registered-0">Запросить регистрационный код</a></p>  
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <div class="item-inner">
+                              <div class="item-input">
+                                 <p><a href="#" class="registered-0-1">Перейти к вводу ПИН-кода</a></p>
                               </div>
                             </div>
                           </div>
@@ -50,16 +75,10 @@
                      </ul>
                     </div>
                 </form>
-                <div class="content-block">
-                  <p><a href="#" class="button registered-0">Запросить регистрационный код</a></p>
-                </div>
-
             </div>            
 
             <div id="registered-1" class="content-block" hidden="hidden">
-                registered-1
                 <form id="registeredForm1" name="registeredForm1" class="list-block">
-                    
                     <div class="content-block-title">Регистрация, шаг2</div>
                     <div class="list-block">
                       <ul>
@@ -70,10 +89,7 @@
                             </div>
                           </div>
                           <div class="item-content">
-                            <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
                             <div class="item-inner">
-
-                              <!--div class="item-title label">Email</div-->
                               <div class="item-input">
                                 <input id="mailTo" name="mailTo" type="email" placeholder="адрес электронной почты" ---pattern="/.+@.+\..+/i" required>
                               </div>
@@ -89,12 +105,27 @@
                         </li>
                         <li>
                           <div class="item-content">
-                            <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
                             <div class="item-inner">
-
-                              <!--div class="item-title label">Email</div-->
                               <div class="item-input">
                                 <input id="pin" name="pin" type="number" placeholder="регистрационный код" required pattern="^[0-9]+$">
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <div class="item-inner">
+                              <div class="item-input">
+                                 <p><a href="#" class="button registered-1">Подтвердить</a></p>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <div class="item-inner">
+                              <div class="item-input">
+                                 <p><a href="#" class="registered-1-back">Перейти к регистрации Email</a></p>
                               </div>
                             </div>
                           </div>
@@ -102,9 +133,6 @@
                      </ul>
                     </div>
                 </form>
-                <div class="content-block">
-                    <p><a href="#" class="button registered-1">Подтвердить</a></p>
-                </div>
             </div>             
             
             <div id="backup-1" class="content-block" hidden="hidden">
@@ -143,7 +171,7 @@
                                         <p>Ваш аккаунт на сервере:</p> 
                                         <p><div id="account">...</div></p>
                                     
-                                        <p>Изменить аккаунт, под которым вы подключаетесь к серверу резервирования</p>
+                                        <p>Вы можете изменить аккаунт для подключения к серверу резервирования</p>
                                         <p><a href="#" class="button backup-2-ok">Изменить аккаунт</a></p>
                                     </div>
                                 </div>

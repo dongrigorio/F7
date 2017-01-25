@@ -284,8 +284,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             x.send(request);
             x.onload = function (){
-                // alert(x.responseText);
-                //console.log(x.responseText);
+                console.log(x.responseText);
                 resp1 = x.responseText.indexOf("<response>",0);
                 resp2 = x.responseText.indexOf("</response>",resp1+1);
                 
@@ -301,14 +300,21 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                     1 "a=dongrigorio@yandex.ru"
                     2 "status=msgsend"
                 */
-                if( (resp3[0] == "oper=0") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=msgsend") ) {
-                    settings.registered = "1"; //открываем экран подтверждения ПИН
-                    localStorage.setItem("settings", JSON.stringify(settings));
-                    console.log("Переход к экрану подтверждения ПИН"); 
-                    //backupPage.trigger();  
-                    mainView.router.refreshPage();
-                } else {
-                    console.log("Ответ сервера не верен");
+                if( (resp3[0] == "oper=0") && (resp3[1] == "a=" + settings.email) ) {
+                    if ((resp3[2] == "status=msgsend") ) {
+                        settings.registered = "1"; //открываем экран подтверждения ПИН
+                        localStorage.setItem("settings", JSON.stringify(settings));
+                        console.log("Переход к экрану подтверждения ПИН"); 
+                        //backupPage.trigger();  
+                        mainView.router.refreshPage();
+                    };
+                    if ((resp3[2] == "status=emailexist") ) {
+                        myApp.alert("Email уже зарегистрирован!","Backup");
+                        settings.registered = "1"; //открываем экран подтверждения ПИН
+                        localStorage.setItem("settings", JSON.stringify(settings));
+                        console.log("email существует в базе, письмо не отправлено"); 
+                        mainView.router.refreshPage();
+                    };                
                 }
             }
         }
@@ -324,7 +330,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             var webUri = "http://geo-format.ru/mp.html";
             var request = "a="  + encodeURIComponent(backupForm["mailTo"]) 
                         + "&oper=" + encodeURIComponent(settings.registered) 
-                        + "&pin=" + encodeURIComponent(backupForm["pin"]) ;
+                        + "&pin=" + encodeURIComponent(backupForm["pin"])
                         + "&rnd=" + encodeURIComponent(Math.random());
 
             console.log("webUri= " + webUri);
@@ -352,7 +358,6 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                     settings.registered = "3"; 
                     settings.pin = backupForm["pin"];
                     localStorage.setItem("settings", JSON.stringify(settings));
-                    //backupPage.trigger();  
                     mainView.router.refreshPage();
                     myApp.alert("Вы зарегистрированы!","Backup");
                     console.log("Переход к экрану активации бэкапа"); 
@@ -374,6 +379,21 @@ var backupPage = myApp.onPageInit('backup', function (page) {
         }
     });
     
+ 
+    $$('.registered-0-1').on('click', function () {
+        settings.registered = "1"; 
+        //settings.pin = ""; 
+        localStorage.setItem("settings", JSON.stringify(settings));
+        mainView.router.refreshPage();
+    });    
+    
+    $$('.registered-1-back').on('click', function () {
+        settings.registered = "0";
+        //settings.pin = "";
+        localStorage.setItem("settings", JSON.stringify(settings));
+        mainView.router.refreshPage();
+    });
+    
     $$('.backup-1-ok').on('click', function () {
         (document.backupForm1.checkBackup.checked )?  (settings.checkBackup="1") : (settings.checkBackup="0");
         localStorage.setItem("settings", JSON.stringify(settings));
@@ -381,7 +401,22 @@ var backupPage = myApp.onPageInit('backup', function (page) {
         console.log("checkBackup = " + settings.checkBackup); 
        
     });
+
+    $$('.backup-2-ok').on('click', function () {
+        
+         myApp.confirm("Изменить аккаунт?","Backup", function () {
+            settings.registered = "0";
+            localStorage.setItem("settings", JSON.stringify(settings));
+            resp3 = [];
+            document.registeredForm1.pin.value = "";
+            document.registeredForm1.mailTo.value = settings.email;
+            mainView.router.refreshPage();
+        },function () {
+            mainView.router.refreshPage();
+        });       
+    });
     
+ /*
     $$('.backup-2-ok').on('click', function () {
         
          myApp.confirm("Зарегистрировать новый аккаунт?","Backup", function () {
@@ -400,7 +435,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             mainView.router.refreshPage();
         });       
     });    
-    
+ */   
     
 });
 
@@ -498,13 +533,48 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
             }
             
             //записываем последнее введенное значение
-            prakticData.prakticPieces += sumSession
-            + ":"
-            + +new Date();
+            prakticData.prakticPieces += sumSession + ":" + +new Date();
 
             localStorage.setItem(prakticId, JSON.stringify(prakticData));
 
+            if (settings.checkBackup) {
+
+                var webUri = "http://geo-format.ru/mp.html";
+                var request = "a="  + encodeURIComponent(settings.email)
+                            + "&pin=" + encodeURIComponent(settings.pin)            
+                            + "&oper=" + encodeURIComponent("2") 
+                            + "&id=" + encodeURIComponent(prakticId)
+                            + "&data=" + encodeURIComponent( JSON.stringify(prakticData) )          
+                            + "&rnd=" + encodeURIComponent( Math.random() );
+
+                console.log("webUri= " + webUri);
+                console.log("request= " + request);
+
+                // open WEB      
+                var x = new XMLHttpRequest();
+                x.open("POST", webUri, true);
+                x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                x.send(request);
+                x.onload = function (){
+                    console.log(x.responseText);
+                    var resp1 = x.responseText.indexOf("<response>",0);
+                    var resp2 = x.responseText.indexOf("</response>",resp1+1);
+
+                    var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split(",")
+                    console.log(resp3);
+                    /*
+                        0:"oper=1"
+                        1:"a=dongrigorio@yandex.ru"
+                        2:"status=regok"
+                    */
+
+                    if( (resp3[0] == "oper=2") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosaved") ) {
+                        myApp.alert("Данные не сохраенены","Backup");
+                        console.log("Данные об изменении практики не сохранились"); 
+                    } 
+                }
             mainView.router.refreshPage();
+            }
         }
     });
     
