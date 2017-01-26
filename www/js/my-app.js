@@ -187,7 +187,7 @@ var indexPage = myApp.onPageInit('index', function (page) {
 myApp.onPageInit('addPraktic', function (page) {
     // Do something here for "addpraktic" page
 
-    //практикИд = колчество записей в локалсторейдж
+    //практикИд = текущее время
     prakticId = +new Date();
     
     $$('.cancel-data').on('click', function () {
@@ -415,27 +415,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             mainView.router.refreshPage();
         });       
     });
-    
- /*
-    $$('.backup-2-ok').on('click', function () {
-        
-         myApp.confirm("Зарегистрировать новый аккаунт?","Backup", function () {
-            settings.registered = "0";
-            localStorage.setItem("settings", JSON.stringify(settings));
-            resp3 = [];
-            document.registeredForm1.pin.value = "";
-            document.registeredForm1.mailTo.value = "";
-            mainView.router.refreshPage();
-        },function () {
-            settings.registered = "1";
-            localStorage.setItem("settings", JSON.stringify(settings));
-            resp3 = [];
-            document.registeredForm1.pin.value = "";
-            document.registeredForm1.mailTo.value = settings.email;
-            mainView.router.refreshPage();
-        });       
-    });    
- */   
+     
     
 });
 
@@ -544,7 +524,8 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                             + "&pin=" + encodeURIComponent(settings.pin)            
                             + "&oper=" + encodeURIComponent("2") 
                             + "&id=" + encodeURIComponent(prakticId)
-                            + "&data=" + encodeURIComponent( JSON.stringify(prakticData) )          
+                            + "&data=" + encodeURIComponent( JSON.stringify(prakticData) ) 
+                            + "&time=" + encodeURIComponent(+new Date().valueOf().valueOf() ) 
                             + "&rnd=" + encodeURIComponent( Math.random() );
 
                 console.log("webUri= " + webUri);
