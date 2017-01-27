@@ -96,13 +96,97 @@ var indexPage = myApp.onPageInit('index', function (page) {
     
     var key;
     //формируем первую страницу
+/*    
+for (var i = 0; i < array.length; i++) {
+  (function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", array[i], true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        console.log(xhr.responseText);
+      }
+    }
+    xhr.send();
+  })();
+}
+    
+*/    
 
     for (key in localStorage) { 
 
         //читаем данные из хранилища чтобы показать на 1 странице
         // на каждую практику в локалсторадже заводится ОДНА строка
         if (key != "settings") {
+
             var prakticData=JSON.parse(localStorage.getItem(key));
+  
+            // Где-то здесь надо синхронизировать!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            
+            if (settings.checkBackup =="1") {
+                
+                
+                
+                
+                //----------------------------------------------------
+                (function() {
+                
+                console.log("Синхронизируемся с сервером"); 
+                var arr = prakticData.prakticPieces.split("=");
+            
+                if (arr.length>0) {
+                    var k = 0;
+                    var dataKey = arr[arr.length-1].indexOf(":",0); //определили позицию разделителя
+                    //piecePraktic[i] = arr[arr.length-1].substring(0,dataKey); //выделили кол-во повторений, но нам тут они не нужны
+                    var lastDate = arr[arr.length-1].substring(dataKey+1,arr[arr.length-1].length); //выделили дату-время
+
+                }
+
+                var webUri = "http://geo-format.ru/mp.html";
+                var request = "a="  + encodeURIComponent(settings.email)
+                            + "&pin=" + encodeURIComponent(settings.pin)            
+                            + "&oper=" + encodeURIComponent("7") 
+                            + "&id=" + encodeURIComponent(key)
+                            + "&time=" + encodeURIComponent(+lastDate ) 
+                            + "&rnd=" + encodeURIComponent( Math.random() );
+
+                console.log("webUri= " + webUri);
+                console.log("request= " + request);
+
+                // open WEB      
+                var x = new XMLHttpRequest();
+                x.open("POST", webUri, true);//true
+                x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                x.send(request);
+                x.onload = function (){
+                    console.log(x.responseText);
+                    var resp1 = x.responseText.indexOf("<response>",0);
+                    var resp2 = x.responseText.indexOf("</response>",resp1+1);
+
+                    var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split(",")
+                    console.log(resp3);
+                    if( (resp3[0] == "oper=9") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosync") ) {
+                        console.log("Данные об изменении практики на сервере АКТУАЛЬНЫ или более старые чем в локальной базе"); 
+                    } 
+                    if( (resp3[0] == "oper=9") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "id=" . key) && (resp3[4] == "status=datasync")  ) {
+                        myApp.alert("Устройство синхронизировано с сервером","Backup");
+                        console.log("Данные от сервера" . resp3[3] ); 
+                    } 
+                }
+                
+            })();
+                
+                
+                
+                //----------------------------------------------
+            }
+            
+            
+            /**/
+            
+            
+            
+            
+            
 
             var cBlock = document.createElement("div");
             cBlock.className = "content-block";  
@@ -420,11 +504,6 @@ var backupPage = myApp.onPageInit('backup', function (page) {
 });
 
 
-
-
-
-
-
 var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     console.log("= "+prakticId + " = prakticId");
     var prakticData = JSON.parse(localStorage[prakticId]);
@@ -513,11 +592,12 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
             }
             
             //записываем последнее введенное значение
-            prakticData.prakticPieces += sumSession + ":" + +new Date();
+            dateLastPiece = +new Date().valueOf(); 
+            prakticData.prakticPieces += sumSession + ":" + +dateLastPiece;
 
             localStorage.setItem(prakticId, JSON.stringify(prakticData));
 
-            if (settings.checkBackup) {
+            if (settings.checkBackup =="1") {
 
                 var webUri = "http://geo-format.ru/mp.html";
                 var request = "a="  + encodeURIComponent(settings.email)
@@ -525,7 +605,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                             + "&oper=" + encodeURIComponent("2") 
                             + "&id=" + encodeURIComponent(prakticId)
                             + "&data=" + encodeURIComponent( JSON.stringify(prakticData) ) 
-                            + "&time=" + encodeURIComponent(+new Date().valueOf().valueOf() ) 
+                            + "&time=" + encodeURIComponent(+dateLastPiece ) 
                             + "&rnd=" + encodeURIComponent( Math.random() );
 
                 console.log("webUri= " + webUri);
@@ -554,8 +634,8 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                         console.log("Данные об изменении практики не сохранились"); 
                     } 
                 }
-            mainView.router.refreshPage();
             }
+            mainView.router.refreshPage();
         }
     });
     
