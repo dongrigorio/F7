@@ -154,8 +154,16 @@ myApp.onPageInit('*', function (page) {
     console.log(page.name + ' initialized'); 
 });
 
+function onBackKeyDown() {
+    // Handle the back button
+}
+
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
+    
+    document.addEventListener("backbutton", onBackKeyDown, false);
+
+    
     console.log("Device is ready!");
     getSettings();
     getBackup();
