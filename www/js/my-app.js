@@ -5,10 +5,13 @@ console.log("go!");
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
 var prakticId = "";
+var prakticData;
 var piecePraktic = [];
 var pieceDate = [];
 var i, j = 0;
 var settings ={};
+var key;
+var arr= [];
 
 // Add view
 var mainView = myApp.addView('.view-main', {
@@ -24,6 +27,18 @@ function alertObj(obj) {
     } 
     alert(str); 
 } 
+
+function utf8_to_b64(str) {
+    return window.btoa(unescape(encodeURIComponent(str)));
+}
+
+function b64_to_utf8(str) {
+    return decodeURIComponent(escape(window.atob(str)));
+}
+
+
+
+/*
 // database test!!!!!!!!!!!!!!
 function populateDB(tx) {
      tx.executeSql('DROP TABLE IF EXISTS DEMO');
@@ -59,13 +74,79 @@ function testDB() {
     return 1;
 }
 // database test!!!!!!!!!!!!!!
+*/
 
-function utf8_to_b64(str) {
-    return window.btoa(unescape(encodeURIComponent(str)));
+function getSettings(){
+    //читаем переменную с настройками, и если нужно - создаем ее заново в локалсторейдже
+    if (localStorage.getItem("settings") == null) { 
+        settings = {email:"", pin:"", registered:"0",checkBackup:""};
+        localStorage.setItem("settings", JSON.stringify(settings));
+        myApp.alert("Добро пожаловать","");
+    } else {
+        settings = JSON.parse(localStorage.getItem("settings"));
+    }
 }
 
-function b64_to_utf8(str) {
-    return decodeURIComponent(escape(window.atob(str)));
+
+
+//------------------бэкап при старте----------------------------
+function getBackup(){
+    for (key in localStorage) { 
+        if (key != "settings") {
+            prakticData=JSON.parse(localStorage.getItem(key));
+            if (settings.checkBackup == "1") {
+                (function( key ) {
+                    console.log("Синхронизируемся с сервером"); 
+                    var arr = prakticData.prakticPieces.split("=");
+
+                    if (arr.length>0) {
+                        var k = 0;
+                        var dataKey = arr[arr.length-1].indexOf(":",0); //определили позицию разделителя
+                        var lastDate = arr[arr.length-1].substring(dataKey+1,arr[arr.length-1].length); //выделили дату-время
+                        console.log("lastDate=" + lastDate + "\n");
+                    }
+
+                    var webUri = "http://geo-format.ru/mp.html";
+                    var request = "a="  + encodeURIComponent(settings.email)
+                                + "&pin=" + encodeURIComponent(settings.pin)            
+                                + "&oper=" + encodeURIComponent("7") 
+                                + "&id=" + encodeURIComponent(key)
+                                + "&time=" + encodeURIComponent(+lastDate ) 
+                                + "&rnd=" + encodeURIComponent( Math.random() );
+
+                    // open WEB      
+                    var x = new XMLHttpRequest();
+                    x.open("POST", webUri, true);
+                    x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    x.send(request);
+                    x.onload = function (){
+                        console.log(x.responseText);
+                        var resp1 = x.responseText.indexOf("<response>",0);
+                        var resp2 = x.responseText.indexOf("</response>",resp1+1);
+
+                        var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
+                        console.log(resp3);
+                        if( (resp3[0] == "oper=7") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosync") ) {
+                            console.log("Данные об изменении практики на сервере более старые, чем в локальной базе"); 
+                        } 
+                         if( (resp3[0] == "oper=7") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosynceq") ) {
+                            console.log("Данные об изменении практики на сервере АКТУАЛЬНЫ не отличаются от локальной базы"); 
+                        } 
+
+                        if( (resp3[0] == "oper=7") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "id=" + key) && (resp3[4] == "status=datasync")  ) {
+                            console.log("Данные об изменении практики на сервере БОЛЕЕ СВЕЖИЕ, и отличаются от локальной базы"); 
+                            var qq = JSON.parse(b64_to_utf8(resp3[3].substr(5)));
+                            myApp.alert("Cинхронизация с сервером выполнена успешно!","Backup");
+                            prakticData.prakticPieces = qq.prakticPieces;
+                            prakticData.prakticSum = qq.prakticSum;
+                            localStorage.setItem(key, JSON.stringify(prakticData));
+                        } 
+                    }
+                })( key );
+            }
+        }
+    }
+    //------------------бэкап при старте----------------------------    
 }
 
 
@@ -76,117 +157,23 @@ myApp.onPageInit('*', function (page) {
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
     console.log("Device is ready!");
-    //alertObj(navigator);
-    // database test!!!!!!!!!!!!!!
-    console.log("testDB = " + testDB() + " =");
-    indexPage.trigger();
-    
+    getSettings();
+    getBackup();
+    //indexPage.trigger();
+    mainView.router.refreshPage();
 });
-   
+
+
 var indexPage = myApp.onPageInit('index', function (page) {
-    //читаем переменную с настройками, и если нужно - создаем ее заново в локалсторейдже
 
-    if (localStorage.getItem("settings") == null) { 
-        settings = {email:"", pin:"", registered:"0",checkBackup:""};
-        localStorage.setItem("settings", JSON.stringify(settings));
-        myApp.alert("Добро пожаловать","");
-    } else {
-        settings = JSON.parse(localStorage.getItem("settings"));
-    }
-    
-    var key;
     //формируем первую страницу
-/*    
-for (var i = 0; i < array.length; i++) {
-  (function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", array[i], true);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4) {
-        console.log(xhr.responseText);
-      }
-    }
-    xhr.send();
-  })();
-}
-    
-*/    
-
     for (key in localStorage) { 
 
         //читаем данные из хранилища чтобы показать на 1 странице
         // на каждую практику в локалсторадже заводится ОДНА строка
         if (key != "settings") {
 
-            var prakticData=JSON.parse(localStorage.getItem(key));
-  
-            // Где-то здесь надо синхронизировать!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            
-            if (settings.checkBackup =="1") {
-                
-                
-                
-                
-                //----------------------------------------------------
-                (function() {
-                
-                console.log("Синхронизируемся с сервером"); 
-                var arr = prakticData.prakticPieces.split("=");
-            
-                if (arr.length>0) {
-                    var k = 0;
-                    var dataKey = arr[arr.length-1].indexOf(":",0); //определили позицию разделителя
-                    //piecePraktic[i] = arr[arr.length-1].substring(0,dataKey); //выделили кол-во повторений, но нам тут они не нужны
-                    var lastDate = arr[arr.length-1].substring(dataKey+1,arr[arr.length-1].length); //выделили дату-время
-
-                }
-
-                var webUri = "http://geo-format.ru/mp.html";
-                var request = "a="  + encodeURIComponent(settings.email)
-                            + "&pin=" + encodeURIComponent(settings.pin)            
-                            + "&oper=" + encodeURIComponent("7") 
-                            + "&id=" + encodeURIComponent(key)
-                            + "&time=" + encodeURIComponent(+lastDate ) 
-                            + "&rnd=" + encodeURIComponent( Math.random() );
-
-                console.log("webUri= " + webUri);
-                console.log("request= " + request);
-
-                // open WEB      
-                var x = new XMLHttpRequest();
-                x.open("POST", webUri, true);//true
-                x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                x.send(request);
-                x.onload = function (){
-                    console.log(x.responseText);
-                    var resp1 = x.responseText.indexOf("<response>",0);
-                    var resp2 = x.responseText.indexOf("</response>",resp1+1);
-
-                    var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split(",")
-                    console.log(resp3);
-                    if( (resp3[0] == "oper=9") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosync") ) {
-                        console.log("Данные об изменении практики на сервере АКТУАЛЬНЫ или более старые чем в локальной базе"); 
-                    } 
-                    if( (resp3[0] == "oper=9") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "id=" . key) && (resp3[4] == "status=datasync")  ) {
-                        myApp.alert("Устройство синхронизировано с сервером","Backup");
-                        console.log("Данные от сервера" . resp3[3] ); 
-                    } 
-                }
-                
-            })();
-                
-                ""prakticPieces":"2:1485428235896=3:1485428246760=324:1485428321030=324:1485429199066=324:1485429234162=2:1485429295098=324:1485429348843=648:1485429474408=4:1485429478401=648:1485429480816=324:1485429647206=2:1485429752903=324:1485430429484=162:1485494567184=2:1485494588182=324:1485494947494=324:1485495887440=2:1485496619943=324:1485496645984=324:1485497451988"}'"
-                
-                //----------------------------------------------
-            }
-            
-            
-            /**/
-            
-            
-            
-            
-            
+            prakticData=JSON.parse(localStorage.getItem(key));
 
             var cBlock = document.createElement("div");
             cBlock.className = "content-block";  
@@ -269,15 +256,8 @@ for (var i = 0; i < array.length; i++) {
 });
 
 myApp.onPageInit('addPraktic', function (page) {
-    // Do something here for "addpraktic" page
-
     //практикИд = текущее время
     prakticId = +new Date();
-    
-    $$('.cancel-data').on('click', function () {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        //location.href="index.html";
-    });
     
     $$('.save-data-addPraktic').on('click', function () {
         var formData = myApp.formToJSON('#addPraktic');
@@ -291,15 +271,16 @@ myApp.onPageInit('addPraktic', function (page) {
 });
 
 var backupPage = myApp.onPageInit('backup', function (page) {
-    
-    //есть регистрация
+
     var resp1, resp2;
-    var resp3 = [];
-    
+    var resp3 = [];    
+
+    //есть регистрация
     if (settings.registered == "3"){
         
             var my_div = document.getElementById("registered-0");  
             my_div.hidden = true;
+        
             var my_div = document.getElementById("registered-1");  
             my_div.hidden = true;        
         
@@ -311,17 +292,6 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             my_div.hidden = false; 
             console.log("settings.registered= " +settings.registered);
     }
-    
-    /* не используем этот экран
-    //нет регистрации  пинкод неверен, запрашиваем повторно
-    if (settings.registered == "2"){
-            var my_div = document.getElementById("registered-1");  
-            my_div.hidden = true;  
-            var my_div = document.getElementById("registered-2");  
-            my_div.hidden = false;
-            console.log("settings.registered= " +settings.registered);
-    }
-    */
     
     //регистрация пошла, запрашиваем пинкод
     if (settings.registered == "1"){
@@ -372,7 +342,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                 resp1 = x.responseText.indexOf("<response>",0);
                 resp2 = x.responseText.indexOf("</response>",resp1+1);
                 
-                resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split(",")
+                resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
                 console.log("resp3-0=" + resp3[0]);
                 console.log("resp3-1=" + resp3[1]);
                 console.log("resp3-2=" + resp3[2]);
@@ -430,7 +400,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                 var resp1 = x.responseText.indexOf("<response>",0);
                 var resp2 = x.responseText.indexOf("</response>",resp1+1);
                 
-                var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split(",")
+                var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
                 console.log(resp3);
                 /*
                     0:"oper=1"
@@ -499,8 +469,59 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             mainView.router.refreshPage();
         });       
     });
-     
-    
+
+    $$('.backup-3-getsrv').on('click', function () {
+        
+         myApp.confirm("Загрузить данные о практиках с сервера?","Backup", function () {
+ 
+            var webUri = "http://geo-format.ru/mp.html";
+            var request = "a="  + encodeURIComponent(settings.email) 
+                        + "&oper=" + encodeURIComponent("10") 
+                        + "&pin=" + encodeURIComponent(settings.pin)
+                        + "&rnd=" + encodeURIComponent(Math.random());
+            
+            console.log("webUri= " + webUri);
+            console.log("request= " + request);
+            
+            // open WEB      
+            var x = new XMLHttpRequest();
+            x.open("POST", webUri, true);
+            x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            x.send(request);
+            x.onload = function (){
+                console.log(x.responseText);
+                var resp1 = x.responseText.indexOf("<response>",0);
+                var resp2 = x.responseText.indexOf("</response>",resp1+1);
+                
+                var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
+                console.log(resp3);
+                
+                var qaz = JSON.parse(resp3[2].substr(5));
+                
+                var data, key, wsx, k = [];
+                
+                if( (resp3[0] == "oper=10") && (resp3[1] == "a=" + settings.email) && (resp3[3] == "status=alldata") ) {
+                    
+                    for (k in localStorage) {
+                        if (k != "settings")
+                            localStorage.removeItem(k);                        
+                    }
+                      for (k in qaz){
+                        wsx = JSON.parse(qaz[k]);
+                        key = wsx["id"];
+                        console.log(key);
+                        data = b64_to_utf8(wsx["data"]);
+                        console.log(data);
+                        localStorage.setItem(key, data);
+                    }
+                } 
+            }            
+            mainView.router.refreshPage();
+        },function () {
+            mainView.router.refreshPage();
+        });       
+    });    
+
 });
 
 
@@ -602,9 +623,9 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                 var webUri = "http://geo-format.ru/mp.html";
                 var request = "a="  + encodeURIComponent(settings.email)
                             + "&pin=" + encodeURIComponent(settings.pin)            
-                            + "&oper=" + encodeURIComponent("2") 
+                            + "&oper=" + encodeURIComponent("22") 
                             + "&id=" + encodeURIComponent(prakticId)
-                            + "&data=" + encodeURIComponent( JSON.stringify(prakticData) ) 
+                            + "&data=" + utf8_to_b64(JSON.stringify(prakticData))
                             + "&time=" + encodeURIComponent(+dateLastPiece ) 
                             + "&rnd=" + encodeURIComponent( Math.random() );
 
@@ -621,7 +642,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                     var resp1 = x.responseText.indexOf("<response>",0);
                     var resp2 = x.responseText.indexOf("</response>",resp1+1);
 
-                    var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split(",")
+                    var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
                     console.log(resp3);
                     /*
                         0:"oper=1"
@@ -629,7 +650,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                         2:"status=regok"
                     */
 
-                    if( (resp3[0] == "oper=2") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosaved") ) {
+                    if( (resp3[0] == "oper=22") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosaved") ) {
                         myApp.alert("Данные не сохраенены","Backup");
                         console.log("Данные об изменении практики не сохранились"); 
                     } 
