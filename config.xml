@@ -8,7 +8,7 @@
     
     <name>Мои практики</name>
     <description>
-        Программа которая облегчает подсчет практик.
+        Программа для подсчета практик.
     </description>
     <author email="2dongrigorio@gmail.com" href="http://geo-format.ru">
         Don Grigorio
@@ -17,15 +17,15 @@
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
-    <icon src="2.jpg" />
+    <icon src="img/ldpi.png" platform="android" qualifier="ldpi" />
+    <icon src="img/mdpi.png" platform="android" qualifier="mdpi" />
+    <icon src="img/hdpi.png" platform="android" qualifier="hdpi" />
+    <icon src="img/xhdpi.png" platform="android" qualifier="xhdpi" />
+    <icon src="img/xxhdpi.png" platform="android" qualifier="xxhdpi" />
+    <icon src="img/fr-xxhdpi.png" platform="android" qualifier="fr-xxhdpi" />
     <platform name="android">
         <preference name="android-minSdkVersion" value="14" />
         <allow-intent href="market:*" />
-        <icon src="2.jpg" />
     </platform>
 
     <preference name="DisallowOverscroll" value="true" />
