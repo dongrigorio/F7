@@ -155,7 +155,7 @@ myApp.onPageInit('*', function (page) {
 });
 
 function onBackKeyDown() {
-    // Handle the back button
+    history.back(); // Handle the back button
 }
 
 // Handle Cordova Device Ready Event
