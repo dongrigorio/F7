@@ -18,7 +18,7 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <preference name="orientation" value="portrait" />
-    <preference name="fullscreen" value="true" />
+    
     <splash src="www/img/fr-xxhdpi.png" platform="android" />
     <platform name="android">
         <preference name="android-minSdkVersion" value="14" />
