@@ -266,7 +266,7 @@ var indexPage = myApp.onPageInit('index', function (page) {
 myApp.onPageInit('addPraktic', function (page) {
     //практикИд = текущее время
     prakticId = +new Date();
-    
+                                                                                             
     $$('.save-data-addPraktic').on('click', function () {
         var formData = myApp.formToJSON('#addPraktic');
         formData["prakticSum"] = "";
@@ -295,8 +295,9 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             var my_div = document.getElementById("account");  
             my_div.innerHTML = "<i>" + settings.email + "</i>";
         
-            var my_div = document.getElementById("backup-1"); 
+            //(settings.checkBackup == "1")? (document.backupForm1.checkBackup.checked = true): (document.backupForm1.checkBackup.checked = false);
             (settings.checkBackup == "1")? (document.backupForm1.checkBackup.checked = true): (document.backupForm1.checkBackup.checked = false);
+            var my_div = document.getElementById("backup-1"); 
             my_div.hidden = false; 
             console.log("settings.registered= " +settings.registered);
     }
@@ -388,7 +389,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
         var backupForm = myApp.formToJSON('#registeredForm1');
         
         if ((backupForm["mailTo"] > "") && (backupForm["pin"] > "")){
-           
+            settings.email = backupForm["mailTo"];
             var webUri = "http://geo-format.ru/mp.html";
             var request = "a="  + encodeURIComponent(backupForm["mailTo"]) 
                         + "&oper=" + encodeURIComponent(settings.registered) 
@@ -539,7 +540,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     var date = new Date();
     var my_div;
     
-    var my_div = document.getElementById("content-block-title");  
+    var my_div = document.getElementById("card-praktic");  
         my_div.innerHTML = prakticData["prakticName"];     
     
     var optionsDate = {

@@ -6,9 +6,9 @@
         versionCode = "0.1"
         xmlns:cdv="http://cordova.apache.org/ns/1.0">
     
-    <name>Мои практики</name>
+    <name>Моя практика</name>
     <description>
-        Программа для подсчета практик.
+        Программа для аккуратных практикунов.
     </description>
     <author email="2dongrigorio@gmail.com" href="http://geo-format.ru">
         Don Grigorio
@@ -18,8 +18,7 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <preference name="orientation" value="portrait" />
-    
-    <splash src="www/img/fr-xxhdpi.png" platform="android" />
+
     <platform name="android">
         <preference name="android-minSdkVersion" value="14" />
         <allow-intent href="market:*" />

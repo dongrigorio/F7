@@ -10,9 +10,7 @@
             </a>
         </div>
         <div class="center sliding">Добавить сессию</div>
-        <!--div class="right">
-            <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
-        </div-->
+
     </div>
 </div>
 
@@ -20,58 +18,63 @@
     <div data-page="praktic" class="page">
         <div class="page-content">
             <div class="content-block">
-                
                 <form id="dataPraktic" class="list-block">
-                    
-                    <div id="content-block-title" class="content-block-title">...</div>
-                    <div class="list-block">
-                      <ul>
-                        <!-- Text inputs -->
-                       <li>
-                          <div class="item-content">
-                            <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
-                            <div class="item-inner">
-                              <!--div class="item-title label">Повторений (раз)</div-->
-                              <div class="item-input">
-                                <input id="dataPrakticPieces" name="dataPrakticPieces" type="number" placeholder="Количество повторений" required pattern="^[0-9]+$">
-                              </div>
+                    <div class="card">
+                        <div class="card-header" id="card-praktic">...</div>
+                        <div class="card-content">
+                            <div class="list-block">
+                              <ul>
+                               <li>
+                                  <div class="item-content">
+
+                                    <div class="item-inner">
+
+                                      <div class="item-input">
+                                        <input id="dataPrakticPieces" name="dataPrakticPieces" type="number" placeholder="Количество повторений" required pattern="^[0-9]+$">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </li>   
+                               <li>
+                                  <div class="item-content">
+
+                                    <div class="item-inner">
+
+                                      <div class="item-input">
+                                        <input id="dataPrakticCircles" name="dataPrakticCircles" type="number" placeholder="Количество кругов" required pattern="^[0-9]+$">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </li>
+                            </ul>                    
+                          </div>                                      
+                        </div>
+                        <div class="card-content">                                      
+                            <div class="card-content-inner">
+                                <a href="#" class="button alert-text-title save-data-praktic">Сохранить</a>  
+                            </div>  
+                        </div>
+                    </div> 
+                    <div class="card">
+                        <div class="card-header" id="card-praktic">Статистика по практике</div>
+                        <div class="card-content">
+                            <div class="card-content-inner">
+                                <div class="ct-chart-day ct-square"> </div>
                             </div>
-                          </div>
-                        </li>   
-                       <li>
-                          <div class="item-content">
-                            <!--div class="item-media"><i class="icon f7-icons">person</i></div-->
-                            <div class="item-inner">
-                              <!--div class="item-title label">Повторений (кругов)</div-->
-                              <div class="item-input">
-                                <input id="dataPrakticCircles" name="dataPrakticCircles" type="number" placeholder="Количество кругов" required pattern="^[0-9]+$">
-                              </div>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
+                            <div class="card-content-inner">
+                                <a href="#" id="delete-last-data" class="button delete-last-data">Удалить последнюю сессию</a>  
+                            </div>     
+                               
+                            <div class="card-content-inner">
+                                <div class="list-block-label" id="circle-length">...</div>
+                            </div>  
+                            <div class="card-content-inner">
+                                <a href="editpraktic.html" class="button edit-data">Изменить настройки практики</a>  
+                            </div>  
+                        </div>
+                    </div>                      
                 </form>
-                <div class="list-block-label">
-                    <p><a href="#" class="button alert-text-title save-data-praktic">Сохранить</a></p>
-                    <!--p><a href="#" class="button cancel-data">Отменить</a></p-->
-                </div>        
-                                
-                <div class="ct-chart-day ct-square"> </div>
-                
-                <div class="list-block-label" id="circle-length">
-                    ...
-                </div>               
             </div>           
-            
-            <div class="content-block">
-                <p><a href="#" id="delete-last-data" class="button delete-last-data">Удалить последнюю сессию</a></p>
-            </div>  
-            
-            <div class="content-block">
-                <p><a href="editpraktic.html" class="button edit-data">Изменить настройки</a></p>
-            </div>           
-            
         </div>
     </div>
 </div>
