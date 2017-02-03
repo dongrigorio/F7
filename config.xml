@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget 
         id="com.phonegap.helloworld" 
-        version="1.0.0" 
+        version="0.1.0" 
         xmlns="http://www.w3.org/ns/widgets" 
         versionCode = "0.1"
         xmlns:cdv="http://cordova.apache.org/ns/1.0">
@@ -17,15 +17,20 @@
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <icon src="img/ldpi.png" platform="android" qualifier="ldpi" />
-    <icon src="img/mdpi.png" platform="android" qualifier="mdpi" />
-    <icon src="img/hdpi.png" platform="android" qualifier="hdpi" />
-    <icon src="img/xhdpi.png" platform="android" qualifier="xhdpi" />
-    <icon src="img/xxhdpi.png" platform="android" qualifier="xxhdpi" />
-    <icon src="img/fr-xxhdpi.png" platform="android" qualifier="fr-xxhdpi" />
+    <preference name="orientation" value="portrait" />
+    <preference name="fullscreen" value="true" />
+    <splash src="www/img/fr-xxhdpi.png" platform="android" />
     <platform name="android">
         <preference name="android-minSdkVersion" value="14" />
         <allow-intent href="market:*" />
+        <icon src="www/img/ldpi.png" platform="android" density="ldpi" qualifier="ldpi" />
+        <icon src="www/img/mdpi.png" platform="android" density="mdpi" qualifier="mdpi" />
+        <icon src="www/img/hdpi.png" platform="android" density="hdpi" qualifier="hdpi" />
+        <icon src="www/img/xhdpi.png" platform="android" density="xhdpi" qualifier="xhdpi" />
+        <icon src="www/img/xxhdpi.png" platform="android" density="xxhdpi" qualifier="xxhdpi" />
+        <icon src="www/img/fr-xxhdpi.png" platform="android" density="fr-xxhdpi" qualifier="fr-xxhdpi" />
+        <splash src="www/img/fr-xxhdpi.png" platform="android" />
+        
     </platform>
 
     <preference name="DisallowOverscroll" value="true" />
