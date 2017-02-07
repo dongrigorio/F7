@@ -26,9 +26,19 @@ https://accounts.google.com/o/oauth2/v2/auth?client_id=1032177642651-me7bi1qgjrb
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
+      <style>
+       .semilayer {
+        opacity: 0.985; /* Значение прозрачности */
+       }
+       .nosemilayer {
+        opacity: 1; /* Значение прозрачности */
+       }
+      </style>
 
+    
+    
     <!-- Your app title -->
-    <title>My App</title>
+    <title>Моя Практика</title>
 
     <!-- This template defaults to the iOS CSS theme. To support both iOS and material design themes, see the Framework7 Tutorial at the link below:
         http://www.idangero.us/framework7/tutorials/maintain-both-ios-and-material-themes-in-single-app.html
@@ -36,7 +46,10 @@ https://accounts.google.com/o/oauth2/v2/auth?client_id=1032177642651-me7bi1qgjrb
 
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.min.css">
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
-
+    
+    <!--link rel="stylesheet" href="lib/framework7/css/framework7.material.min.css">
+    <link rel="stylesheet" href="lib/framework7/css/framework7.material.colors.min.css"-->
+    
     <link rel="stylesheet" href="css/styles.css">
     
     <link rel="stylesheet" href="chartist/chartist.min.css">
@@ -52,33 +65,26 @@ https://accounts.google.com/o/oauth2/v2/auth?client_id=1032177642651-me7bi1qgjrb
     <!-- Left panel with reveal effect-->
     <div class="panel panel-left panel-reveal">
         <div class="content-block">
-            <!--p>Left panel content goes here</p-->
-		<p><a href="addpraktic.html" class="button button-big close-panel active">Добавить практику</a></p>
-        <p><a href="backup.html" class="button button-big close-panel active">Резервное копирование</a></p>
-		<!--p><a href="#" class="button button-big">Preferences</a></p-->  
+		  <p><a href="addpraktic.html" class="button -button-big close-panel active">Добавить практику</a></p>
+          <p><a href="backup.html" class="button -button-big close-panel active">Резервное копирование</a></p>
         </div>
     </div>
 
     <!-- Views -->
     <div class="views">
-        <!-- Your main view, should have "view-main" class -->
         <div class="view view-main">
             <!-- Top Navbar-->
             <div class="navbar">
                 <div class="navbar-inner">
                     <!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
-                    <div class="center sliding">Мои практики</div>
+                    <div class="center">Моя практика</div>
                     <div class="right">
-                        <!--
-                          Right link contains only icon - additional "icon-only" class
-                          Additional "open-panel" class tells app to open panel when we click on this link
-                        -->
                         <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
                     </div>
                 </div>
             </div>
             <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
-            <div class="pages navbar-through toolbar-through" >
+            <div class="pages navbar-fixed toolbar-fixed" >
                 <!-- Page, "data-page" contains page name -->
                 <div data-page="index" class="page" style="background-image:url(./img/logo.png); background-position:center; background-repeat: no-repeat; background-size: contain;">
                     <!-- Scrollable page content -->
@@ -87,14 +93,6 @@ https://accounts.google.com/o/oauth2/v2/auth?client_id=1032177642651-me7bi1qgjrb
                     </div>
                 </div>
             </div>
-            <!-- Bottom Toolbar-->
-            <!--div class="toolbar">
-                <div class="toolbar-inner">
-                    <!-- Toolbar links -->
-                    <!--a href="#" class="link">Link 1</a>
-                    <a href="#" class="link">Link 2</a>
-                </div>
-            </div-->
         </div>
     </div>
 

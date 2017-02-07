@@ -187,7 +187,7 @@ var indexPage = myApp.onPageInit('index', function (page) {
             cBlock.className = "content-block";  
 
             var cBlock1 = document.createElement("div");
-            cBlock1.className = "card";
+            cBlock1.className = "card semilayer";
 
             var cBlock2 = document.createElement("div");
             cBlock2.className = "card-header";
@@ -250,8 +250,8 @@ var indexPage = myApp.onPageInit('index', function (page) {
             cBlock1.appendChild(cBlock3);
             cBlock.appendChild(cBlock1);       
 
-            var my_div = document.getElementById("page-content");  
-            my_div.appendChild(cBlock);
+            document.getElementById("page-content").appendChild(cBlock);  
+
         }
     }
     
@@ -286,39 +286,33 @@ var backupPage = myApp.onPageInit('backup', function (page) {
     //есть регистрация
     if (settings.registered == "3"){
         
-            var my_div = document.getElementById("registered-0");  
-            my_div.hidden = true;
-        
-            var my_div = document.getElementById("registered-1");  
-            my_div.hidden = true;        
-        
-            var my_div = document.getElementById("account");  
-            my_div.innerHTML = "<i>" + settings.email + "</i>";
-        
-            //(settings.checkBackup == "1")? (document.backupForm1.checkBackup.checked = true): (document.backupForm1.checkBackup.checked = false);
-            (settings.checkBackup == "1")? (document.backupForm1.checkBackup.checked = true): (document.backupForm1.checkBackup.checked = false);
-            var my_div = document.getElementById("backup-1"); 
-            my_div.hidden = false; 
+            document.getElementById("registered-0").hidden = true;  
+            document.getElementById("registered-1").hidden = true;  
+            document.getElementById("account").innerHTML = "<i>" + settings.email + "</i>";  
+
+            if (settings.checkBackup == "1") {
+                document.getElementById("checkBackup").checked = true;
+            }
+            document.getElementById("backup-1").hidden = false; 
             console.log("settings.registered= " +settings.registered);
     }
     
     //регистрация пошла, запрашиваем пинкод
     if (settings.registered == "1"){
-            var my_div = document.getElementById("registered-0");  
-            my_div.hidden = true;     
-            
+            document.getElementById("registered-0").hidden = true;  
+                        
             document.registeredForm1.pin.value = "";
             document.registeredForm1.mailTo.value = settings.email;
         
-            var my_div = document.getElementById("registered-1");  
-            my_div.hidden = false;
+            document.getElementById("registered-1").hidden = false;  
+            
             console.log("settings.registered= " +settings.registered);
     }
     
     //нет регистрации. запрашиваем имейл
     if (settings.registered == "0"){
-            var my_div = document.getElementById("registered-0");  
-            my_div.hidden = false;   
+            document.getElementById("registered-0").hidden = false;  
+            
             console.log("settings.registered= " +settings.registered);
     }
 
