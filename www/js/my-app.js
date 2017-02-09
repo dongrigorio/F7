@@ -1,5 +1,6 @@
 // Initialize app
 var myApp = new Framework7();
+
 console.log("go!"); 
 
 // If we need to use custom DOM library, let's save it to $$ variable:
@@ -18,6 +19,8 @@ var mainView = myApp.addView('.view-main', {
     // Because we want to use dynamic navbar, we need to enable it for this view:
     dynamicNavbar: true
 });
+
+
 
 function alertObj(obj) {
     var str = "";
@@ -91,6 +94,7 @@ function getSettings(){
 
 //------------------бэкап при старте----------------------------
 function getBackup(){
+    var noacc = "";
     for (key in localStorage) { 
         if (key != "settings") {
             prakticData=JSON.parse(localStorage.getItem(key));
@@ -132,6 +136,9 @@ function getBackup(){
                          if( (resp3[0] == "oper=7") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosynceq") ) {
                             console.log("Данные об изменении практики на сервере АКТУАЛЬНЫ не отличаются от локальной базы"); 
                         } 
+                         if( (resp3[0] == "oper=7") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=noaccount") ) {
+                            noacc = "noacc"; 
+                        }                        
 
                         if( (resp3[0] == "oper=7") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "id=" + key) && (resp3[4] == "status=datasync")  ) {
                             console.log("Данные об изменении практики на сервере БОЛЕЕ СВЕЖИЕ, и отличаются от локальной базы"); 
@@ -144,6 +151,10 @@ function getBackup(){
                     }
                 })( key );
             }
+            if (noacc == "noacc") {
+                settings.registered = "0";
+                myApp.alert("Аккаунт" + settings.email + " не найден на сервере резервирования. Проверьте настройки!","Backup");
+            }
         }
     }
     //------------------бэкап при старте----------------------------    
@@ -155,19 +166,55 @@ myApp.onPageInit('*', function (page) {
 });
 
 function onBackKeyDown() {
-    history.back(); // Handle the back button
+    
+    //history.back(); // Handle the back button
+    
+    var page = myApp.getCurrentView().activePage;
+        myApp.hidePreloader();
+        if (page.name == "home") {
+            e.preventDefault();
+            if (confirm("Do you want to Exit!")) {
+                navigator.app.clearHistory();
+                navigator.app.exitApp();
+            }
+        } else {
+            navigator.app.backHistory()
+        }
+
 }
+
+
+        
+/*        
+function appReady() {
+    document.addEventListener("backbutton"", function(e) {
+        var page = myApp.getCurrentView().activePage;
+        myApp.hidePreloader();
+        if (page.name == "home") {
+            e.preventDefault();
+            if (confirm(“Do you want to Exit!”)) {
+                navigator.app.clearHistory();
+                navigator.app.exitApp();
+            }
+        } else {
+            navigator.app.backHistory()
+        }
+    }, false);
+}
+*/
+    
+
+
 
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
     
     document.addEventListener("backbutton", onBackKeyDown, false);
 
-    
     console.log("Device is ready!");
     getSettings();
     getBackup();
-    //indexPage.trigger();
+    indexPage.trigger();
     mainView.router.refreshPage();
 });
 
@@ -319,7 +366,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
     $$('.registered-0').on('click', function () {
 
         //settings.registered = "1";
-        backupPage.trigger();
+        //backupPage.trigger();
         
         var backupForm = myApp.formToJSON('#registered-0');
         
@@ -452,11 +499,12 @@ var backupPage = myApp.onPageInit('backup', function (page) {
     });
     
     $$('.backup-1-ok').on('click', function () {
-        (document.backupForm1.checkBackup.checked )?  (settings.checkBackup="1") : (settings.checkBackup="0");
-        localStorage.setItem("settings", JSON.stringify(settings));
-        
-        console.log("checkBackup = " + settings.checkBackup); 
-       
+        if (settings.registered == "3") {
+            (document.backupForm1.checkBackup.checked )?  (settings.checkBackup="1") : (settings.checkBackup="0");
+            localStorage.setItem("settings", JSON.stringify(settings));
+
+            console.log("checkBackup = " + settings.checkBackup); 
+        }
     });
 
     $$('.backup-2-ok').on('click', function () {
@@ -616,12 +664,12 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
             }
             
             //записываем последнее введенное значение
-            dateLastPiece = +new Date().valueOf(); 
+            var dateLastPiece = +new Date().valueOf(); 
             prakticData.prakticPieces += sumSession + ":" + +dateLastPiece;
 
             localStorage.setItem(prakticId, JSON.stringify(prakticData));
 
-            if (settings.checkBackup =="1") {
+            if ( (settings.checkBackup =="1") && (settings.registered == "3") ) {
 
                 var webUri = "http://geo-format.ru/mp.html";
                 var request = "a="  + encodeURIComponent(settings.email)
@@ -654,8 +702,8 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                     */
 
                     if( (resp3[0] == "oper=22") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosaved") ) {
-                        myApp.alert("Данные не сохраенены","Backup");
-                        console.log("Данные об изменении практики не сохранились"); 
+                        myApp.alert("Изменения не сохраены на сервере. Проверьте ваш аккаунт " + settings.email,"Backup");
+                        console.log("Данные об изменении практики не сохранились на сервере"); 
                     } 
                 }
             }
@@ -690,17 +738,58 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                     //отрезаем последнее равно
                     prakticData.prakticPieces = prakticData.prakticPieces.substring(0,  prakticData.prakticPieces.length-1);
                     console.log("prakticData.prakticPieces =" + prakticData.prakticPieces);
-
+                    
+                    //--------------------------------------
                     localStorage.setItem(prakticId, JSON.stringify(prakticData));
                     //myApp.alert("Последняя сессия удалена", "");
+                    if ( (settings.checkBackup =="1") && (settings.registered == "3") ) {
 
+                        var webUri = "http://geo-format.ru/mp.html";
+                        var request = "a="  + encodeURIComponent(settings.email)
+                                    + "&pin=" + encodeURIComponent(settings.pin)            
+                                    + "&oper=" + encodeURIComponent("22") 
+                                    + "&id=" + encodeURIComponent(prakticId)
+                                    + "&data=" + utf8_to_b64(JSON.stringify(prakticData))
+                                    + "&time=" + encodeURIComponent(+pieceDate[pieceDate.length-1] ) 
+                                    + "&rnd=" + encodeURIComponent( Math.random() );
+
+                        console.log("webUri= " + webUri);
+                        console.log("request= " + request);
+
+                        // open WEB      
+                        var x = new XMLHttpRequest();
+                        x.open("POST", webUri, true);
+                        x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        x.send(request);
+                        x.onload = function (){
+                            console.log(x.responseText);
+                            var resp1 = x.responseText.indexOf("<response>",0);
+                            var resp2 = x.responseText.indexOf("</response>",resp1+1);
+
+                            var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
+                            console.log(resp3);
+                            /*
+                                0:"oper=1"
+                                1:"a=dongrigorio@yandex.ru"
+                                2:"status=regok"
+                            */
+
+                            if( (resp3[0] == "oper=22") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosaved") ) {
+                                myApp.alert("Изменения не сохраены на сервере. Проверьте ваш аккаунт " + settings.email,"Backup");
+                                console.log("Данные об изменении практики не сохранились на сервере"); 
+                            } 
+                        }
+                    }
+                    //---------------------------------------
                     mainView.router.refreshPage();
                 });
 
         } else {
             myApp.alert("Нет данных для удаления", "");
             mainView.router.refreshPage();
+            
         }
+        
     });
     
 });
@@ -743,7 +832,7 @@ myApp.onPageInit('editPraktic', function (page) {
     });
     
     $$('.delete-praktic').on('click', function () {
-             myApp.confirm("Удалить практику " + prakticData["prakticName"],"", function () {
+             myApp.confirm("Удалить практику " + prakticData["prakticName"] + "?","", function () {
                  localStorage.removeItem(prakticId);
                  location.href="index.html";
             });
