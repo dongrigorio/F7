@@ -10,7 +10,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://geo-format.ru/mp.html data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://geo-format.ru/mp.html https://money.yandex.ru/quickpay/button-widget https://money.yandex.ru/to/ data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
 
     <!-- Required meta tags-->
     <meta charset="utf-8">
@@ -21,7 +21,7 @@
     <meta name="msapplication-tap-highlight" content="no">
       <style>
        .semilayer {
-        opacity: 0.985; /* Значение прозрачности */
+        opacity: 0.97; /* Значение прозрачности */
        }
        .nosemilayer {
         opacity: 1; /* Значение прозрачности */
@@ -57,6 +57,8 @@
         <div class="content-block">
 		  <p><a href="addpraktic.html" class="button -button-big close-panel active">Добавить практику</a></p>
           <p><a href="backup.html" class="button -button-big close-panel active">Резервное копирование</a></p>
+            
+            <p><a href="about.html" class="button -button-big close-panel active"> О программе</a></p>
         </div>
     </div>
 

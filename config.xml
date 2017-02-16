@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget 
         id="com.phonegap.helloworld" 
-        version="0.1.0" 
+        version="0.2.0" 
         xmlns="http://www.w3.org/ns/widgets" 
-        versionCode = "0.1"
+        versionCode = "0.2"
         xmlns:cdv="http://cordova.apache.org/ns/1.0">
     
     <name>Моя практика</name>
