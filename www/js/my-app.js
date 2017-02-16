@@ -165,6 +165,15 @@ myApp.onPageInit('*', function (page) {
     console.log(page.name + ' initialized'); 
 });
 
+document.addEventListener("backbutton", onBackKeyDown, false);
+
+function onBackKeyDown() {
+    alert("hello");
+    navigator.app.backHistory();
+}
+
+
+/*
 function onBackKeyDown() {
     
     //history.back(); // Handle the back button
@@ -182,6 +191,7 @@ function onBackKeyDown() {
         }
 
 }
+*/
 
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
@@ -197,14 +207,16 @@ $$(document).on('deviceready', function () {
 
 
 var indexPage = myApp.onPageInit('index', function (page) {
-
+    var prakticCount = 0;
     //формируем первую страницу
     for (key in localStorage) { 
 
         //читаем данные из хранилища чтобы показать на 1 странице
         // на каждую практику в локалсторадже заводится ОДНА строка
         if (key != "settings") {
-
+            
+            prakticCount++;
+            
             prakticData=JSON.parse(localStorage.getItem(key));
 
             var cBlock = document.createElement("div");
@@ -278,6 +290,35 @@ var indexPage = myApp.onPageInit('index', function (page) {
 
         }
     }
+    // если практик нет ни одной показываем текст
+    if (prakticCount == 0) {
+            var cBlock = document.createElement("div");
+            cBlock.className = "content-block";  
+
+            var cBlock1 = document.createElement("div");
+            cBlock1.className = "card semilayer";
+
+            var cBlock2 = document.createElement("div");
+            cBlock2.className = "card-header";
+            cBlock2.innerHTML = "Добро пожаловать!";
+
+            var cBlock3 = document.createElement("div");
+            cBlock3.className = "card-content";
+
+            var cBlock4 = document.createElement("div");
+            cBlock4.className = "card-content-inner";
+
+            cBlock4.innerHTML = "<p>При первом запуске обратите внимание на значок меню <i class=\"icon icon-bars\"></i> в правом верхнем углу экрана. В открывшемся меню вы сможете добавить и настроить свои практики, а так же зарегистрироваться на сервере программы для резервного копирования данных с вашего устройства.</p>";
+
+            cBlock3.appendChild(cBlock4);    
+            cBlock1.appendChild(cBlock2);
+            cBlock1.appendChild(cBlock3);
+            cBlock.appendChild(cBlock1);       
+
+            document.getElementById("page-content").appendChild(cBlock);  
+  
+    }
+    
     
     //в параметре type лежит ключ к данным в ЛокалСторейдже
     $$('.go-praktic').on('click', function () {        
