@@ -168,6 +168,7 @@ myApp.onPageInit('*', function (page) {
 document.addEventListener("backbutton", onBackKeyDown, false);
 
 function onBackKeyDown() {
+    history.go(-1);
     navigator.app.backHistory();
 }
 
