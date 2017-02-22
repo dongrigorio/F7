@@ -852,6 +852,32 @@ myApp.onPageInit('editPraktic', function (page) {
     $$('.delete-praktic').on('click', function () {
              myApp.confirm("Удалить практику " + prakticData["prakticName"] + "?","", function () {
                  localStorage.removeItem(prakticId);
+                        var webUri = "http://geo-format.ru/mp.html";
+                        var request = "a="  + encodeURIComponent(settings.email)
+                                    + "&pin=" + encodeURIComponent(settings.pin)            
+                                    + "&oper=" + encodeURIComponent("del") 
+                                    + "&id=" + encodeURIComponent(prakticId)
+                                    + "&rnd=" + encodeURIComponent( Math.random() );
+
+                        // open WEB      
+                        var x = new XMLHttpRequest();
+                        x.open("POST", webUri, true);
+                        x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        x.send(request);
+                        x.onload = function (){
+                            //console.log(x.responseText);
+                            var resp1 = x.responseText.indexOf("<response>",0);
+                            var resp2 = x.responseText.indexOf("</response>",resp1+1);
+
+                            var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
+                            //console.log(resp3);
+
+
+                            if( (resp3[0] == "oper=del") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=prakticDeleted") ) {
+                                myApp.alert("Практика удалена!" ,"Backup");
+                            } 
+                        }                 
+
                  location.href="index.html";
             });
     });
