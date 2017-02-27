@@ -165,7 +165,7 @@ myApp.onPageInit('*', function (page) {
     console.log(page.name + ' initialized'); 
 });
 
-document.addEventListener("backbutton", onBackKeyDown, false);
+//document.addEventListener("backbutton", onBackKeyDown, false);
 
 function onBackKeyDown() {
     history.go(-1);
@@ -202,7 +202,7 @@ $$(document).on('deviceready', function () {
     console.log("Device is ready!");
     getSettings();
     getBackup();
-    indexPage.trigger();
+    //indexPage.trigger();
     mainView.router.refreshPage();
 });
 
