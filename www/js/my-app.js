@@ -110,7 +110,7 @@ function getBackup(){
                         console.log("lastDate=" + lastDate + "\n");
                     }
 
-                    var webUri = "http://geo-format.ru/mp.html";
+                    var webUri = "https://geo-format.ru/mp.html";
                     var request = "a="  + encodeURIComponent(settings.email)
                                 + "&pin=" + encodeURIComponent(settings.pin)            
                                 + "&oper=" + encodeURIComponent("7") 
@@ -170,6 +170,7 @@ document.addEventListener("backbutton", onBackKeyDown, false);
 function onBackKeyDown() {
     history.go(-1);
     navigator.app.backHistory();
+    console.log(page.name); 
 }
 
 
@@ -392,7 +393,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             settings.email =  backupForm["mailTo"];
             localStorage.setItem("settings", JSON.stringify(settings));
             
-            var webUri = "http://geo-format.ru/mp.html";
+            var webUri = "https://geo-format.ru/mp.html";
             var request = "a="  + encodeURIComponent(backupForm["mailTo"]) 
                         + "&oper=" + encodeURIComponent(settings.registered) 
                         + "&rnd=" + encodeURIComponent(Math.random());
@@ -449,7 +450,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
         
         if ((backupForm["mailTo"] > "") && (backupForm["pin"] > "")){
             settings.email = backupForm["mailTo"];
-            var webUri = "http://geo-format.ru/mp.html";
+            var webUri = "https://geo-format.ru/mp.html";
             var request = "a="  + encodeURIComponent(backupForm["mailTo"]) 
                         + "&oper=" + encodeURIComponent(settings.registered) 
                         + "&pin=" + encodeURIComponent(backupForm["pin"])
@@ -543,7 +544,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
         
          myApp.confirm("Загрузить данные о практиках с сервера?","Backup", function () {
  
-            var webUri = "http://geo-format.ru/mp.html";
+            var webUri = "https://geo-format.ru/mp.html";
             var request = "a="  + encodeURIComponent(settings.email) 
                         + "&oper=" + encodeURIComponent("10") 
                         + "&pin=" + encodeURIComponent(settings.pin)
@@ -689,7 +690,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
 
             if ( (settings.checkBackup =="1") && (settings.registered == "3") ) {
 
-                var webUri = "http://geo-format.ru/mp.html";
+                var webUri = "https://geo-format.ru/mp.html";
                 var request = "a="  + encodeURIComponent(settings.email)
                             + "&pin=" + encodeURIComponent(settings.pin)            
                             + "&oper=" + encodeURIComponent("22") 
@@ -762,7 +763,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                     //myApp.alert("Последняя сессия удалена", "");
                     if ( (settings.checkBackup =="1") && (settings.registered == "3") ) {
 
-                        var webUri = "http://geo-format.ru/mp.html";
+                        var webUri = "https://geo-format.ru/mp.html";
                         var request = "a="  + encodeURIComponent(settings.email)
                                     + "&pin=" + encodeURIComponent(settings.pin)            
                                     + "&oper=" + encodeURIComponent("22") 
@@ -852,7 +853,7 @@ myApp.onPageInit('editPraktic', function (page) {
     $$('.delete-praktic').on('click', function () {
              myApp.confirm("Удалить практику " + prakticData["prakticName"] + "?","", function () {
                  localStorage.removeItem(prakticId);
-                        var webUri = "http://geo-format.ru/mp.html";
+                        var webUri = "https://geo-format.ru/mp.html";
                         var request = "a="  + encodeURIComponent(settings.email)
                                     + "&pin=" + encodeURIComponent(settings.pin)            
                                     + "&oper=" + encodeURIComponent("del") 
