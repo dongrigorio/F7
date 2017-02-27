@@ -170,7 +170,7 @@ myApp.onPageInit('*', function (page) {
 function onBackKeyDown() {
     history.go(-1);
     navigator.app.backHistory();
-    console.log(page.name); 
+    console.log(myApp.getCurrentView().activePage.name); 
 }
 
 
