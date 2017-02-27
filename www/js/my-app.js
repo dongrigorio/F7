@@ -170,7 +170,7 @@ myApp.onPageInit('*', function (page) {
 //document.addEventListener("backbutton", onBackKeyDown, false);
 
 function onBackKeyDown() {
-
+    
    navigator.app.backHistory();
   
     console.log("--->");
