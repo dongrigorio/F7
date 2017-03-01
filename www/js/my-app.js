@@ -163,13 +163,18 @@ function getBackup(){
 
 myApp.onPageInit('*', function (page) {
     console.log(page.name + ' initialized'); 
+    console.log("--->" + myApp.getCurrentView().activePage.name)
+
 });
 
-document.addEventListener("backbutton", onBackKeyDown, false);
+//document.addEventListener("backbutton", onBackKeyDown, false);
 
 function onBackKeyDown() {
-    history.go(-1);
-    navigator.app.backHistory();
+    
+   navigator.app.backHistory();
+  
+    console.log("--->");
+    console.log(myApp.getCurrentView().activePage.name); 
 }
 
 
