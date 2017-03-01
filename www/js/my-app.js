@@ -175,17 +175,26 @@ function onBackKeyDown() {
     //navigator.app.backHistory();
     
     if (myApp.getCurrentView().activePage.name == "praktic") {
-        location.href="index.html";
+        mainView.router.loadPage("index.html")
+        //location.href="index.html";
     }
+    if (myApp.getCurrentView().activePage.name == "editPraktic") {
+        mainView.router.loadPage("praktic.html")
+        //location.href="index.html";
+    }    
     if (myApp.getCurrentView().activePage.name == "about") {
-        location.href="index.html";
+        mainView.router.loadPage("index.html")
+        //location.href="index.html";
     }    
     if (myApp.getCurrentView().activePage.name == "backup") {
-        location.href="index.html";
+        mainView.router.loadPage("index.html")
+        //location.href="index.html";
     }       
-    if (myApp.getCurrentView().activePage.name == "editPraktic") {
-        location.href="praktic.html";
-    }    
+
+    if (myApp.getCurrentView().activePage.name == "addPraktic") {
+        mainView.router.loadPage("index.html")
+        //location.href="index.html";
+    }     
     if (myApp.getCurrentView().activePage.name == "index") {
         myApp.confirm("Закрыть программу?","Моя Практика", function () {
             echo("Close programm");
