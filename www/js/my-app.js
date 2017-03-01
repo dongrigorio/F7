@@ -110,7 +110,7 @@ function getBackup(){
                         console.log("lastDate=" + lastDate + "\n");
                     }
 
-                    var webUri = "http://geo-format.ru/mp.html";
+                    var webUri = "https://geo-format.ru/mp.html";
                     var request = "a="  + encodeURIComponent(settings.email)
                                 + "&pin=" + encodeURIComponent(settings.pin)            
                                 + "&oper=" + encodeURIComponent("7") 
@@ -201,7 +201,7 @@ $$(document).on('deviceready', function () {
     console.log("Device is ready!");
     getSettings();
     getBackup();
-    indexPage.trigger();
+    //indexPage.trigger();
     mainView.router.refreshPage();
 });
 
@@ -308,7 +308,7 @@ var indexPage = myApp.onPageInit('index', function (page) {
             var cBlock4 = document.createElement("div");
             cBlock4.className = "card-content-inner";
 
-            cBlock4.innerHTML = "<p>При первом запуске обратите внимание на значок меню <i class=\"icon icon-bars\"></i> в правом верхнем углу экрана. В открывшемся меню вы сможете добавить и настроить свои практики, а так же зарегистрироваться на сервере программы для резервного копирования данных с вашего устройства.</p>";
+            cBlock4.innerHTML = "<p>Обратите внимание на значок меню <i class=\"icon icon-bars\"></i> в правом верхнем углу экрана. В открывшемся меню вы сможете добавить и настроить свои практики, а так же зарегистрироваться на сервере программы для резервного копирования данных с вашего устройства.</p>";
 
             cBlock3.appendChild(cBlock4);    
             cBlock1.appendChild(cBlock2);
@@ -392,7 +392,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             settings.email =  backupForm["mailTo"];
             localStorage.setItem("settings", JSON.stringify(settings));
             
-            var webUri = "http://geo-format.ru/mp.html";
+            var webUri = "https://geo-format.ru/mp.html";
             var request = "a="  + encodeURIComponent(backupForm["mailTo"]) 
                         + "&oper=" + encodeURIComponent(settings.registered) 
                         + "&rnd=" + encodeURIComponent(Math.random());
@@ -449,7 +449,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
         
         if ((backupForm["mailTo"] > "") && (backupForm["pin"] > "")){
             settings.email = backupForm["mailTo"];
-            var webUri = "http://geo-format.ru/mp.html";
+            var webUri = "https://geo-format.ru/mp.html";
             var request = "a="  + encodeURIComponent(backupForm["mailTo"]) 
                         + "&oper=" + encodeURIComponent(settings.registered) 
                         + "&pin=" + encodeURIComponent(backupForm["pin"])
@@ -543,7 +543,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
         
          myApp.confirm("Загрузить данные о практиках с сервера?","Backup", function () {
  
-            var webUri = "http://geo-format.ru/mp.html";
+            var webUri = "https://geo-format.ru/mp.html";
             var request = "a="  + encodeURIComponent(settings.email) 
                         + "&oper=" + encodeURIComponent("10") 
                         + "&pin=" + encodeURIComponent(settings.pin)
@@ -689,7 +689,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
 
             if ( (settings.checkBackup =="1") && (settings.registered == "3") ) {
 
-                var webUri = "http://geo-format.ru/mp.html";
+                var webUri = "https://geo-format.ru/mp.html";
                 var request = "a="  + encodeURIComponent(settings.email)
                             + "&pin=" + encodeURIComponent(settings.pin)            
                             + "&oper=" + encodeURIComponent("22") 
@@ -762,7 +762,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                     //myApp.alert("Последняя сессия удалена", "");
                     if ( (settings.checkBackup =="1") && (settings.registered == "3") ) {
 
-                        var webUri = "http://geo-format.ru/mp.html";
+                        var webUri = "https://geo-format.ru/mp.html";
                         var request = "a="  + encodeURIComponent(settings.email)
                                     + "&pin=" + encodeURIComponent(settings.pin)            
                                     + "&oper=" + encodeURIComponent("22") 
@@ -852,7 +852,7 @@ myApp.onPageInit('editPraktic', function (page) {
     $$('.delete-praktic').on('click', function () {
              myApp.confirm("Удалить практику " + prakticData["prakticName"] + "?","", function () {
                  localStorage.removeItem(prakticId);
-                        var webUri = "http://geo-format.ru/mp.html";
+                        var webUri = "https://geo-format.ru/mp.html";
                         var request = "a="  + encodeURIComponent(settings.email)
                                     + "&pin=" + encodeURIComponent(settings.pin)            
                                     + "&oper=" + encodeURIComponent("del") 

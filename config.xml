@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget 
-        id="com.phonegap.helloworld" 
+        id="com.phonegap.MyPraktic" 
         version="0.2.0" 
         xmlns="http://www.w3.org/ns/widgets" 
         versionCode = "0.2"
