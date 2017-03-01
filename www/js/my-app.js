@@ -170,11 +170,29 @@ myApp.onPageInit('*', function (page) {
 //document.addEventListener("backbutton", onBackKeyDown, false);
 
 function onBackKeyDown() {
-    
-   navigator.app.backHistory();
-  
     console.log("--->");
     console.log(myApp.getCurrentView().activePage.name); 
+    //navigator.app.backHistory();
+    
+    if (myApp.getCurrentView().activePage.name == "praktic") {
+        location.href="index.html";
+    }
+    if (myApp.getCurrentView().activePage.name == "about") {
+        location.href="index.html";
+    }    
+    if (myApp.getCurrentView().activePage.name == "backup") {
+        location.href="index.html";
+    }       
+    if (myApp.getCurrentView().activePage.name == "editPraktic") {
+        location.href="praktic.html";
+    }    
+    if (myApp.getCurrentView().activePage.name == "index") {
+        myApp.confirm("Закрыть программу?","Моя Практика", function () {
+            echo("Close programm");
+        },function () {
+            location.href="index.html";
+        });        
+    }
 }
 
 
