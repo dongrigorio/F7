@@ -1,5 +1,15 @@
 // Initialize app
-var myApp = new Framework7();
+var myApp = new Framework7(
+{
+    onAjaxStart: function (xhr) {
+        myApp.showIndicator();
+    },
+    onAjaxComplete: function (xhr) {
+        myApp.hideIndicator();
+    }
+}
+
+);
 
 console.log("go!"); 
 
@@ -161,71 +171,29 @@ function getBackup(){
 }
 
 
-myApp.onPageInit('*', function (page) {
+myApp.onPageInit('*', function (page) {     
     console.log(page.name + ' initialized'); 
-    console.log("--->" + myApp.getCurrentView().activePage.name)
-
+    console.log("--->" + myApp.getCurrentView().activePage.name);
 });
 
-//document.addEventListener("backbutton", onBackKeyDown, false);
-
 function onBackKeyDown() {
-    console.log("--->");
-    console.log(myApp.getCurrentView().activePage.name); 
-    //navigator.app.backHistory();
-    /*
-    if (myApp.getCurrentView().activePage.name == "praktic") {
-        mainView.router.loadPage("index.html")
-        //location.href="index.html";
-    }
-    if (myApp.getCurrentView().activePage.name == "editPraktic") {
-        mainView.router.loadPage("praktic.html")
-        //location.href="index.html";
-    }    
-    if (myApp.getCurrentView().activePage.name == "about") {
-        mainView.router.loadPage("index.html")
-        //location.href="index.html";
-    }    
-    if (myApp.getCurrentView().activePage.name == "backup") {
-        mainView.router.loadPage("index.html")
-        //location.href="index.html";
-    }       
-
-    if (myApp.getCurrentView().activePage.name == "addPraktic") {
-        mainView.router.loadPage("index.html")
-        //location.href="index.html";
-    }  */   
     if (myApp.getCurrentView().activePage.name == "index") {
         myApp.confirm("Закрыть программу?","Моя Практика", function () {
-            echo("Close programm");
+            navigator.app.exitApp();
         },function () {
-            location.href="index.html";
         });        
+    } 
+    
+    if (myApp.getCurrentView().activePage.name == "editPraktic") {
+        mainView.router.back({
+            pageName: "praktic"
+        });
+        pageInitPraktic.trigger();
     } else {
-        mainView.router.back();
+        mainView.router.load({url:'index.html'});   
     }
 }
 
-
-/*
-function onBackKeyDown() {
-    
-    //history.back(); // Handle the back button
-    
-    var page = myApp.getCurrentView().activePage;
-        myApp.hidePreloader();
-        if (page.name == "home") {
-            e.preventDefault();
-            if (confirm("Do you want to Exit!")) {
-                navigator.app.clearHistory();
-                navigator.app.exitApp();
-            }
-        } else {
-            navigator.app.backHistory()
-        }
-
-}
-*/
 
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
@@ -235,7 +203,6 @@ $$(document).on('deviceready', function () {
     console.log("Device is ready!");
     getSettings();
     getBackup();
-    //indexPage.trigger();
     mainView.router.refreshPage();
 });
 
@@ -284,9 +251,6 @@ var indexPage = myApp.onPageInit('index', function (page) {
 
             //сделано в %
             var piecesDone = +prakticData.prakticSum/+prakticData.prakticLength * 100 ^ 0;
-
-            // осталось сделать в %
-            var picesDo;
 
             if (piecesDone >100) {
                 piecesDone = 100;
@@ -693,6 +657,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     my_div = document.getElementById("circle-length"); 
     my_div.innerHTML = str;
 
+    mainView.router.refreshPage();
     
     $$('.save-data-praktic').on('click', function () {
         var formData = myApp.formToJSON('#dataPraktic');
@@ -876,11 +841,11 @@ myApp.onPageInit('editPraktic', function (page) {
 
         myApp.alert("Данные сохранены", "editPraktic");
 
-        pageInitPraktic.trigger();
+        //pageInitPraktic.trigger();
         mainView.router.back({
             pageName: "praktic"
         });
-
+        pageInitPraktic.trigger();
     });
     
     $$('.delete-praktic').on('click', function () {
