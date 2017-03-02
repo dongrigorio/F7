@@ -50,45 +50,6 @@ function b64_to_utf8(str) {
 }
 
 
-
-/*
-// database test!!!!!!!!!!!!!!
-function populateDB(tx) {
-     tx.executeSql('DROP TABLE IF EXISTS DEMO');
-     tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, data)');
-     tx.executeSql('INSERT INTO DEMO (id, data) VALUES (1, "First row")');
-     tx.executeSql('INSERT INTO DEMO (id, data) VALUES (2, "Second row")');
-
-}
-
-function errorCB(err) {
-    alert("Error processing SQL: "+err.code);
-}
-
-function successCB() {
-    //alert("success!");
-    return;
-}
-
-function testDB() {
-    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
-    db.transaction(populateDB, errorCB, successCB);
-    
-    db.transaction(function (tx) {
-        tx.executeSql('SELECT id,DATA FROM DEMO WHERE id =1', [], function (tx, results) {
-        var len = results.rows.length, i;
-        console.log( "Found rows: " + len );
-          for (i = 0; i < len; i++){
-             console.log(results.rows.item(i) );
-              //console.log(results.rows.item(i).data );
-          }
-        }, null);
-    });    
-    return 1;
-}
-// database test!!!!!!!!!!!!!!
-*/
-
 function getSettings(){
     //читаем переменную с настройками, и если нужно - создаем ее заново в локалсторейдже
     if (localStorage.getItem("settings") == null) { 
@@ -99,7 +60,6 @@ function getSettings(){
         settings = JSON.parse(localStorage.getItem("settings"));
     }
 }
-
 
 
 //------------------бэкап при старте----------------------------
@@ -177,33 +137,37 @@ myApp.onPageInit('*', function (page) {
 });
 
 function onBackKeyDown() {
-    if (myApp.getCurrentView().activePage.name == "index") {
-        myApp.confirm("Закрыть программу?","Моя Практика", function () {
-            navigator.app.exitApp();
-        },function () {
-        });        
-    } 
-    
-    if (myApp.getCurrentView().activePage.name == "editPraktic") {
-        mainView.router.back({
-            pageName: "praktic"
-        });
-        pageInitPraktic.trigger();
-    } else {
-        mainView.router.load({url:'index.html'});   
-    }
+    switch (myApp.getCurrentView().activePage.name) {
+        case "index":               
+            myApp.confirm("Закрыть программу?","Моя Практика", function () {
+                    navigator.app.exitApp();
+                },function () {
+                    mainView.router.load({url:'index.html'});
+            });    
+
+            break;
+                                    
+        case "editPraktic":         
+            mainView.router.back({
+                pageName: "praktic"
+            });
+            pageInitPraktic.trigger();
+            break;
+            
+        default:
+            mainView.router.load({url:'index.html'});
+            break;
+    }  
 }
 
 
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
-    
     document.addEventListener("backbutton", onBackKeyDown, false);
-
     console.log("Device is ready!");
     getSettings();
     getBackup();
-    mainView.router.refreshPage();
+    mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
 });
 
 
@@ -245,9 +209,9 @@ var indexPage = myApp.onPageInit('index', function (page) {
             var cBlock5 = document.createElement("div");
             cBlock5.className = "ct-chart ct-double-octave";
             cBlock5.innerHTML = "<style type=\"text/css\">"
-                            +   ".ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {stroke: #39E639;}"
-                            +   ".ct-series-b .ct-bar, .ct-series-b .ct-line, .ct-series-b .ct-point, .ct-series-b .ct-slice-donut {stroke: #FF4040;}"
-                            +   "</style>";
+                +   ".ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {stroke: #39E639;}"
+                +   ".ct-series-b .ct-bar, .ct-series-b .ct-line, .ct-series-b .ct-point, .ct-series-b .ct-slice-donut {stroke: #FF4040;}"
+                +   "</style>";
 
             //сделано в %
             var piecesDone = +prakticData.prakticSum/+prakticData.prakticLength * 100 ^ 0;
