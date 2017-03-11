@@ -55,7 +55,7 @@ function getSettings(){
     if (localStorage.getItem("settings") == null) { 
         settings = {email:"", pin:"", registered:"0",checkBackup:""};
         localStorage.setItem("settings", JSON.stringify(settings));
-        myApp.alert("Добро пожаловать","");
+        //myApp.alert("Добро пожаловать","");
     } else {
         settings = JSON.parse(localStorage.getItem("settings"));
     }
