@@ -354,7 +354,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             settings.email =  backupForm["mailTo"];
             localStorage.setItem("settings", JSON.stringify(settings));
             
-            var webUri = "https://geo-format.ru/mp.html";
+            var webUri = "http://geo-format.ru/mp.html";
             var request = "a="  + encodeURIComponent(backupForm["mailTo"]) 
                         + "&oper=" + encodeURIComponent(settings.registered) 
                         + "&rnd=" + encodeURIComponent(Math.random());
@@ -398,8 +398,11 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                         localStorage.setItem("settings", JSON.stringify(settings));
                         console.log("email существует в базе, письмо не отправлено"); 
                         mainView.router.refreshPage();
-                    };                
-                }
+                    };   
+                    if ((resp3[3] == "status=msgnosend") ) {
+                        myApp.alert("Ошибка почтовой службы: " + resp3[2],"Backup");
+                    }
+                } 
             }
         }
       
