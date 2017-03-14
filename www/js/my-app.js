@@ -1,15 +1,12 @@
 // Initialize app
-var myApp = new Framework7(
-{
+var myApp = new Framework7({
     onAjaxStart: function (xhr) {
         myApp.showIndicator();
     },
     onAjaxComplete: function (xhr) {
         myApp.hideIndicator();
     }
-}
-
-);
+});
 
 console.log("go!"); 
 
@@ -30,8 +27,6 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: true
 });
 
-
-
 function alertObj(obj) {
     var str = "";
     var k;
@@ -49,7 +44,6 @@ function b64_to_utf8(str) {
     return decodeURIComponent(escape(window.atob(str)));
 }
 
-
 function getSettings(){
     //читаем переменную с настройками, и если нужно - создаем ее заново в локалсторейдже
     if (localStorage.getItem("settings") == null) { 
@@ -61,8 +55,7 @@ function getSettings(){
     }
 }
 
-
-//------------------бэкап при старте----------------------------
+//------------------Чтение бэкапа при старте----------------------------
 function getBackup(){
     var noacc = "";
     for (key in localStorage) { 
@@ -130,7 +123,6 @@ function getBackup(){
     //------------------бэкап при старте----------------------------    
 }
 
-
 myApp.onPageInit('*', function (page) {     
     console.log(page.name + ' initialized'); 
     console.log("--->" + myApp.getCurrentView().activePage.name);
@@ -160,7 +152,6 @@ function onBackKeyDown() {
     }  
 }
 
-
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
     document.addEventListener("backbutton", onBackKeyDown, false);
@@ -169,7 +160,6 @@ $$(document).on('deviceready', function () {
     getBackup();
     mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
 });
-
 
 var indexPage = myApp.onPageInit('index', function (page) {
     var prakticCount = 0;
@@ -558,7 +548,6 @@ var backupPage = myApp.onPageInit('backup', function (page) {
 
 });
 
-
 var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     console.log("= "+prakticId + " = prakticId");
     var prakticData = JSON.parse(localStorage[prakticId]);
@@ -777,7 +766,6 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     });
     
 });
-
 
 myApp.onPageInit('editPraktic', function (page) {
     
