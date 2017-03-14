@@ -354,7 +354,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             settings.email =  backupForm["mailTo"];
             localStorage.setItem("settings", JSON.stringify(settings));
             
-            var webUri = "http://geo-format.ru/mp.html";
+            var webUri = "https://geo-format.ru/mp.html";
             var request = "a="  + encodeURIComponent(backupForm["mailTo"]) 
                         + "&oper=" + encodeURIComponent(settings.registered) 
                         + "&rnd=" + encodeURIComponent(Math.random());
