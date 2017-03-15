@@ -1,6 +1,6 @@
-platforms
-platforms/*
-hooks
-hooks/*
-plugins
-plugins/*
+/platforms
+/platforms/*
+/hooks
+/hooks/*
+/plugins
+/plugins/*
