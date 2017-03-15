@@ -587,7 +587,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                 k += +piecePraktic[i];
         }
 
-        str = "<table border=0 cellpadding = 5>";
+        var str = "<table border=0 cellpadding = 5>";
         str += "<tr valign = middle><td> <b>" + prakticData["prakticCircleLength"] + "</b></td><td> длина одного круга</td></tr>";
         str += "<tr valign = middle><td> <b>" + ((+k/(arr.length-1))^0) + "</b></td><td> cреднее количеcтво повторений за одну сессию </td></tr>";
         str += "<tr valign = middle><td> <b>" + ( (+prakticData.prakticLength - +prakticData.prakticSum)/(+k/(arr.length-1))^0  ) + "</b></td><td> сессий потребуется для достижения цели</td></tr>"; 
@@ -595,24 +595,29 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
         
         date.setTime(+pieceDate[arr.length-1]- +pieceDate[0] + 5*1000*60*60*24);
         var periodDate = (date/ 24 / 60 / 60 / 1000 )^0;
-    
-    }   
-    
-    new Chartist.Bar('.ct-chart-day', {
-      labels: labels1,
-      series: [series1]
-    }, {
-        horizontalBars: true,
-        axisY: {
-           offset: 70
-        }
         
-    });
+    
+        new Chartist.Bar('.ct-chart-day', {
+          labels: labels1,
+          series: [series1]
+        }, {
+            horizontalBars: true,
+            axisY: {
+               offset: 70
+            }
 
-    my_div = document.getElementById("circle-length"); 
-    my_div.innerHTML = str;
+        });
 
-    mainView.router.refreshPage();
+        my_div = document.getElementById("circle-length"); 
+        my_div.innerHTML = str;
+
+        mainView.router.refreshPage();        
+
+    } else {
+        my_div = document.getElementById("ct-chart-day"); 
+        my_div.innerHTML = "Добавьте первую сессию, и статистика начнет считаться.";
+    } 
+
 
     
     $$('.save-data-praktic').on('click', function () {
