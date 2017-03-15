@@ -8,7 +8,7 @@
             * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
             * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
+            * Enable inline JS: add 'unsafe-inline' to default-src
     -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://geo-format.ru/mp.html https://geo-format.ru/mp.html  data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
 
@@ -32,15 +32,9 @@
     <!-- Your app title -->
     <title>Моя Практика</title>
 
-    <!-- This template defaults to the iOS CSS theme. To support both iOS and material design themes, see the Framework7 Tutorial at the link below:
-        http://www.idangero.us/framework7/tutorials/maintain-both-ios-and-material-themes-in-single-app.html
-     -->
-
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.min.css">
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
-    
     <link rel="stylesheet" href="css/styles.css">
-    
     <link rel="stylesheet" href="chartist/chartist.min.css">
   
 </head>
@@ -55,10 +49,9 @@
     <!-- Left panel with reveal effect-->
     <div class="panel panel-left panel-reveal">
         <div class="content-block">
-		  <p><a href="addpraktic.html" class="button -button-big close-panel active">Добавить практику</a></p>
-          <p><a href="backup.html" class="button -button-big close-panel active">Резервное копирование</a></p>
-            
-            <p><a href="about.html" class="button -button-big close-panel active"> О программе</a></p>
+            <p><a href="addpraktic.html" class="button -button-big close-panel active">Добавить практику</a></p>
+            <p><a href="backup.html" class="button -button-big close-panel active">Резервное копирование</a></p>
+            <p><a href="about.html" class="button -button-big close-panel active">О программе</a></p>
         </div>
     </div>
 
@@ -81,7 +74,7 @@
                 <div data-page="index" class="page" style="background-image:url(./img/logo.png); background-position:center; background-repeat: no-repeat; background-size: contain;">
                     <!-- Scrollable page content -->
                     <div id="page-content" class="page-content" >
-                       <!--p><input type="button" value="Проверить" onclick="onBackKeyDown()"></p--> 
+                       <!-- Здесь отображение страницы --> 
                     </div>
                 </div>
             </div>
@@ -89,13 +82,27 @@
         </div>
     </div>
 
+  <div class="popover popover-links-praktic-menu">
+    <div class="popover-angle"></div>
+    <div class="popover-inner">
+      <div class="list-block">
+        <ul>
+          <li><a href="#" class="list-button item-link delete-last-data">Удалить последнюю сессию</a></li> 
+          <li><a href="editpraktic.html" class="list-button item-link edit-data">Изменить настройки практики</a></li> 
+        </ul>
+      </div>
+    </div>
+  </div>    
+    
+    
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
-
     <script type="text/javascript" src="chartist/chartist.min.js"></script>  
-    
     <script type="text/javascript" src="js/my-app.js"></script>
-     
+
+    
+    
+    
 </body>
 
 </html>

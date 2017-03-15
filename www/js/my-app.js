@@ -555,7 +555,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     var my_div;
     
     var my_div = document.getElementById("card-praktic");  
-        my_div.innerHTML = prakticData["prakticName"];     
+        my_div.innerHTML = "<b>" + prakticData["prakticName"] +"</b>";     
     
     var optionsDate = {
      // era: 'long',
@@ -570,15 +570,12 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     };
     piecePraktic=[]; 
     pieceDate=[];
-    var str = "<p>Установлена длина одного круга <b>" + prakticData["prakticCircleLength"] + "</b> </p>";
-    
  
     if (prakticData.prakticPieces.length > 0){
         
         var arr = prakticData.prakticPieces.split("=");
         var labels1 = [], series1 = [];
-        var k;
-        k = 0;
+        var k = 0;
 
         for (i=0; i<arr.length; i++){
             var dataKey = arr[i].indexOf(":",0); //определили позицию разделителя
@@ -589,10 +586,12 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                 series1[i] = +piecePraktic[i];
                 k += +piecePraktic[i];
         }
-                
-        str += "<p>Среднее количеcтво повторений за одну сессию:  " + ((+k/(arr.length-1))^0);
-        str += "<p>Для достижения цели потребуется приблизительно " + ( (+prakticData.prakticLength - +prakticData.prakticSum)/(+k/(arr.length-1))^0  ) + " сессий.";
-        str += " </p>";        
+
+        str = "<table border=0 cellpadding = 5>";
+        str += "<tr valign = middle><td> <b>" + prakticData["prakticCircleLength"] + "</b></td><td> длина одного круга</td></tr>";
+        str += "<tr valign = middle><td> <b>" + ((+k/(arr.length-1))^0) + "</b></td><td> cреднее количеcтво повторений за одну сессию </td></tr>";
+        str += "<tr valign = middle><td> <b>" + ( (+prakticData.prakticLength - +prakticData.prakticSum)/(+k/(arr.length-1))^0  ) + "</b></td><td> сессий потребуется для достижения цели</td></tr>"; 
+        str += "</table>";
         
         date.setTime(+pieceDate[arr.length-1]- +pieceDate[0] + 5*1000*60*60*24);
         var periodDate = (date/ 24 / 60 / 60 / 1000 )^0;
@@ -614,6 +613,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     my_div.innerHTML = str;
 
     mainView.router.refreshPage();
+
     
     $$('.save-data-praktic').on('click', function () {
         var formData = myApp.formToJSON('#dataPraktic');
@@ -683,11 +683,17 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
             mainView.router.refreshPage();
         }
     });
+
+    
+    $$('.edit-data').on('click', function () {
+        myApp.closeModal();
+    });   
+    
     
     $$('.delete-last-data').on('click', function () {
-        
+            myApp.closeModal();
             if (piecePraktic.length > 0) {
-                myApp.confirm("Удалить ?","", function () {
+                myApp.confirm("Последняя сессия "+ +piecePraktic[piecePraktic.length-1] + " повторений. Удалить ?","", function () {
 
                     prakticData.prakticSum = +prakticData.prakticSum - +piecePraktic[piecePraktic.length-1];
 
@@ -759,8 +765,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
 
         } else {
             myApp.alert("Нет данных для удаления", "");
-            mainView.router.refreshPage();
-            
+            mainView.router.refreshPage();   
         }
         
     });
@@ -775,16 +780,10 @@ myApp.onPageInit('editPraktic', function (page) {
     document.editPraktic.prakticLength.value = prakticData["prakticLength"];
     document.editPraktic.prakticCircleLength.value = prakticData["prakticCircleLength"];
     
-    
-   // my_div = document.getElementById("circle-length"); 
-   // my_div.innerHTML = "<p>Установлена длина одного круга <b>" + prakticData["prakticCircleLength"] + "</b> </p>"; 
-    
-    
     $$('.cancel-data').on('click', function () {
         mainView.router.back({
             pageName: "praktic"
-        });
-        
+        }); 
     });
 
     $$('.save-data-editPraktic').on('click', function () {
@@ -796,7 +795,6 @@ myApp.onPageInit('editPraktic', function (page) {
 
         myApp.alert("Данные сохранены", "editPraktic");
 
-        //pageInitPraktic.trigger();
         mainView.router.back({
             pageName: "praktic"
         });
@@ -819,13 +817,9 @@ myApp.onPageInit('editPraktic', function (page) {
                         x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                         x.send(request);
                         x.onload = function (){
-                            //console.log(x.responseText);
                             var resp1 = x.responseText.indexOf("<response>",0);
                             var resp2 = x.responseText.indexOf("</response>",resp1+1);
-
-                            var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
-                            //console.log(resp3);
-
+                            var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&");
 
                             if( (resp3[0] == "oper=del") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=prakticDeleted") ) {
                                 myApp.alert("Практика удалена!" ,"Backup");
