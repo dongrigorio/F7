@@ -9,11 +9,28 @@
     "installed_plugins": {
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.phonegap.dongrigorio.mypraktic"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
         }
     },
     "dependent_plugins": {},
-    "modules": [],
+    "modules": [
+        {
+            "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+            "id": "cordova-plugin-statusbar.statusbar",
+            "pluginId": "cordova-plugin-statusbar",
+            "clobbers": [
+                "window.StatusBar"
+            ]
+        }
+    ],
     "plugin_metadata": {
-        "cordova-plugin-console": "1.0.4"
+        "cordova-plugin-console": "1.0.4",
+        "cordova-plugin-whitelist": "1.2.2",
+        "cordova-plugin-statusbar": "1.0.1"
     }
 }
