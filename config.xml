@@ -3,7 +3,7 @@
         id="com.phonegap.dongrigorio.mypraktic" 
         version="0.2.2" 
         xmlns="http://www.w3.org/ns/widgets" 
-        versionCode = "0.2.2"
+        versionCode = "0.2.3"
         xmlns:cdv="http://cordova.apache.org/ns/1.0">
     
     <name>Моя практика</name>
