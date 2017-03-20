@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget 
         id="com.phonegap.dongrigorio.mypraktic" 
-        version="0.2.3" 
+        version="0.2.4" 
         xmlns="http://www.w3.org/ns/widgets" 
         versionCode = "0.2.3"
         xmlns:cdv="http://cordova.apache.org/ns/1.0">

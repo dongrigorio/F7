@@ -553,9 +553,11 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     var prakticData = JSON.parse(localStorage[prakticId]);
     var date = new Date();
     var my_div;
+    var sumSession = 0;
+    var formData;
+    var prevInput = 0;
     
-    var my_div = document.getElementById("card-praktic");  
-        my_div.innerHTML = "<b>" + prakticData["prakticName"] +"</b>";     
+    //document.getElementById("card-praktic").innerHTML = "<b>" + prakticData["prakticName"] +"</b>";     
     
     var optionsDate = {
      // era: 'long',
@@ -570,7 +572,9 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     };
     piecePraktic=[]; 
     pieceDate=[];
- 
+    
+    document.getElementById("prakticName").innerHTML = prakticData["prakticName"];
+    
     if (prakticData.prakticPieces.length > 0){
         
         var arr = prakticData.prakticPieces.split("=");
@@ -614,18 +618,38 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
         mainView.router.refreshPage();        
 
     } else {
-        my_div = document.getElementById("ct-chart-day"); 
-        my_div.innerHTML = "Добавьте первую сессию, и статистика начнет считаться.";
+        document.getElementById("ct-chart-day").innerHTML = "Добавьте первую сессию, и статистика начнет считаться.";
     } 
 
-
+    document.getElementById("cirleShow").innerHTML = "Добавить круги (" + prakticData["prakticCircleLength"] + "):";   
+    
+     $$('.dataPrakticPieces').on('keyup keydown change', function () {
+        formData = myApp.formToJSON('#dataPraktic'); 
+        var resInput = +formData['dataPrakticPieces'];
+        sumSession = sumSession - prevInput + resInput;
+        if (sumSession<=0) sumSession = 0;
+        prevInput = resInput;
+        document.getElementById("session-result").innerHTML = +sumSession;            
+    });   
+    
+    $$('.inc-result').on('click', function () {
+        sumSession += +prakticData["prakticCircleLength"];
+        document.getElementById("session-result").innerHTML = sumSession;  
+    });
+    
+    $$('.dec-result').on('click', function () {
+        if (sumSession >= +prakticData["prakticCircleLength"]) {
+            sumSession -= +prakticData["prakticCircleLength"];
+        }
+        document.getElementById("session-result").innerHTML = sumSession;  
+    });    
+    
+    
     
     $$('.save-data-praktic').on('click', function () {
-        var formData = myApp.formToJSON('#dataPraktic');
-        if ((+formData.dataPrakticPieces >0) || (+formData.dataPrakticCircles >0)) {
 
-            var sumSession = (+formData.dataPrakticPieces + (+formData.dataPrakticCircles * +prakticData["prakticCircleLength"]));
-                        
+        if (sumSession>0) {
+                                
             prakticData.prakticSum = +prakticData.prakticSum + +sumSession;
             //сохраняем последние 20 значений
             //если записано больше 19 значений то запишем все кроме первого, если меньше то все
@@ -680,7 +704,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                     */
 
                     if( (resp3[0] == "oper=22") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosaved") ) {
-                        myApp.alert("Изменения не сохраены на сервере. Проверьте ваш аккаунт " + settings.email,"Backup");
+                        myApp.alert("Изменения не сохранены на сервере. Обновите настройки вашего аккаунта " + settings.email,"Backup");
                         console.log("Данные об изменении практики не сохранились на сервере"); 
                     } 
                 }
