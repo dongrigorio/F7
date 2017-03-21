@@ -13,13 +13,16 @@ console.log("go!");
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
 var prakticId = "";
-var prakticData;
+var prakticData = [];
 var piecePraktic = [];
 var pieceDate = [];
 var i, j = 0;
 var settings ={};
 var key;
 var arr= [];
+
+prakticData["prakticPieces"] = 0;
+prakticData["prakticSum"] = 0;
 
 // Add view
 var mainView = myApp.addView('.view-main', {
@@ -182,7 +185,7 @@ var indexPage = myApp.onPageInit('index', function (page) {
 
             var cBlock2 = document.createElement("div");
             cBlock2.className = "card-header";
-            cBlock2.innerHTML = prakticData.prakticName;
+            cBlock2.innerHTML = "<b>" + prakticData.prakticName + "</b>";
 
             var cBlock3 = document.createElement("div");
             cBlock3.className = "card-content";
@@ -242,7 +245,7 @@ var indexPage = myApp.onPageInit('index', function (page) {
 
         }
     }
-    // если практик нет ни одной показываем текст
+    // если практик нет ни одной- показываем текст
     if (prakticCount == 0) {
             var cBlock = document.createElement("div");
             cBlock.className = "content-block";  
@@ -285,13 +288,21 @@ myApp.onPageInit('addPraktic', function (page) {
     prakticId = +new Date();
                                                                                              
     $$('.save-data-addPraktic').on('click', function () {
+        
         var formData = myApp.formToJSON('#addPraktic');
-        formData["prakticSum"] = "";
-        formData["prakticPieces"] = ""; 
-        localStorage.setItem(prakticId, JSON.stringify(formData));
-        myApp.alert('Данные сохранены',"addPraktic");
+        
+        if ( formData["prakticName"] > "" 
+            && formData["prakticLength"] > ""
+            && formData["prakticCircleLength"] >"") {
+            
+                formData["prakticSum"] = "";
+                formData["prakticPieces"] = ""; 
+                localStorage.setItem(prakticId, JSON.stringify(formData));
+                myApp.alert('Добавлена практика "' + formData["prakticName"] + '"' ,"addPraktic");
+                
+                location.href="index.html";                
+            }
 
-        location.href="index.html";
     });
 });
 
@@ -822,7 +833,7 @@ myApp.onPageInit('editPraktic', function (page) {
 
         localStorage.setItem(prakticId, JSON.stringify(prakticData));
 
-        myApp.alert("Данные сохранены", "editPraktic");
+        //myApp.alert("Данные сохранены", "editPraktic");
 
         mainView.router.back({
             pageName: "praktic"
