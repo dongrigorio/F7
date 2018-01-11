@@ -24,9 +24,30 @@
     <div data-page="praktic" class="page">
         <div class="page-content">
             <div class="content-block">
-                <form id="dataPraktic" class="list-block">     
+                <form id="dataPraktic" class="list-block">    
+                    
                     <div class="card">
-                        <div class="card-header" id="card-praktic"><b>Добавить сессию</b></div>
+                        <div class="card-content"> 
+                            <div class="list-block">
+                                <div class="item-content">
+                                    
+                                    <div class="item-inner">
+                                        <span>Выполнено:</span>
+                                        <span id="praktic-result" style="font-size:100%;"> 0 </span>
+                                    </div>
+                                </div>    
+                                <div class="item-content">                                
+                                    <div class="item-inner">
+                                        <span>Осталось выполнить:</span>
+                                        <span id="praktic-up" style="font-size:100%;"> 0 </span>
+                                    </div>                                      
+                                </div>                                  
+                            </div>   
+                        </div>  
+                    </div>
+                    
+                    <div class="card">                        
+                        <!--div class="card-header" id="card-praktic"><b>Добавить сессию</b></div-->
                         <div class="card-content">   
                             <div class="list-block">
                                 <div class="item-content">
@@ -69,7 +90,7 @@
                                     </div>                            
                                     <div class="item-inner">
                                         <div class="item-input">
-                                            <input class="dataPrakticPieces" id="dataPrakticPieces" name="dataPrakticPieces" type="number" placeholder="0" pattern="^[0-9]+$">
+                                            <input autofocus class="dataPrakticPieces" id="dataPrakticPieces" name="dataPrakticPieces" type="number" placeholder="0" pattern="^[0-9]+$">
                                         </div>    
                                     </div>                                                   
                                 </div>                              
@@ -83,14 +104,14 @@
                         </div>
                     </div>                   
                     <div class="card">
-                        <div class="card-header" id="card-praktic">Статистика по практике</div>
+                        <div class="card-header" id="card-praktic"><b>Статистика по практике</b></div>
                         <div class="card-content">
                             <div class="card-content-inner">
                                 <div class="ct-chart-day ct-square" id="ct-chart-day"> </div>
                             </div>
                            
                             <div class="card-content-inner">
-                                <div class="list-block-label" id="circle-length">...</div>
+                                <div class="list-block-label" id="circle-length"> </div>
                             </div>  
 
                         </div>

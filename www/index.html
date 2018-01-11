@@ -10,8 +10,13 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
             * Enable inline JS: add 'unsafe-inline' to default-src
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://geo-format.ru/mp.html https://geo-format.ru/mp.html  data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://geo-format.ru/mp.html https://geo-format.ru/mp.html  data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
 
+         <meta http-equiv="Content-Security-Policy" content="default-src * gap: file:; style-src 'self' 'unsafe-inline' *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *">
+    -->
+   <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://geo-format.ru/mp.html https://geo-format.ru/mp.html  data: gap: file: 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    
+    
     <!-- Required meta tags-->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
@@ -26,8 +31,13 @@
        .nosemilayer {
         opacity: 1; /* Значение прозрачности */
        }
+        input::-webkit-input-placeholder {
+            color: #E4E4E4; /* Цвет подсказывающего текста */  
+            font-style: italic;
+            background: #FBFEF7;
+        }     
+           
       </style>
-
     
     <!-- Your app title -->
     <title>Моя Практика</title>

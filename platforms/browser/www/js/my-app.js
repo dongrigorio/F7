@@ -13,13 +13,18 @@ console.log("go!");
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
 var prakticId = "";
-var prakticData;
+var prakticData = [];
 var piecePraktic = [];
 var pieceDate = [];
 var i, j = 0;
 var settings ={};
 var key;
 var arr= [];
+
+
+
+prakticData["prakticPieces"] = 0;
+prakticData["prakticSum"] = 0;
 
 // Add view
 var mainView = myApp.addView('.view-main', {
@@ -63,14 +68,14 @@ function getBackup(){
             prakticData=JSON.parse(localStorage.getItem(key));
             if (settings.checkBackup == "1") {
                 (function( key ) {
-                    console.log("Синхронизируемся с сервером"); 
+                    //console.log("Синхронизируемся с сервером"); 
                     var arr = prakticData.prakticPieces.split("=");
 
                     if (arr.length>0) {
                         var k = 0;
                         var dataKey = arr[arr.length-1].indexOf(":",0); //определили позицию разделителя
                         var lastDate = arr[arr.length-1].substring(dataKey+1,arr[arr.length-1].length); //выделили дату-время
-                        console.log("lastDate=" + lastDate + "\n");
+                        //console.log("lastDate=" + lastDate + "\n");
                     }
 
                     var webUri = "https://geo-format.ru/mp.html";
@@ -87,24 +92,24 @@ function getBackup(){
                     x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                     x.send(request);
                     x.onload = function (){
-                        console.log(x.responseText);
+                        //console.log(x.responseText);
                         var resp1 = x.responseText.indexOf("<response>",0);
                         var resp2 = x.responseText.indexOf("</response>",resp1+1);
 
                         var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
-                        console.log(resp3);
+                        //console.log(resp3);
                         if( (resp3[0] == "oper=7") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosync") ) {
-                            console.log("Данные об изменении практики на сервере более старые, чем в локальной базе"); 
+                            //console.log("Данные об изменении практики на сервере более старые, чем в локальной базе"); 
                         } 
                          if( (resp3[0] == "oper=7") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosynceq") ) {
-                            console.log("Данные об изменении практики на сервере АКТУАЛЬНЫ не отличаются от локальной базы"); 
+                            //console.log("Данные об изменении практики на сервере АКТУАЛЬНЫ не отличаются от локальной базы"); 
                         } 
                          if( (resp3[0] == "oper=7") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=noaccount") ) {
                             noacc = "noacc"; 
                         }                        
 
                         if( (resp3[0] == "oper=7") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "id=" + key) && (resp3[4] == "status=datasync")  ) {
-                            console.log("Данные об изменении практики на сервере БОЛЕЕ СВЕЖИЕ, и отличаются от локальной базы"); 
+                            //console.log("Данные об изменении практики на сервере БОЛЕЕ СВЕЖИЕ, и отличаются от локальной базы"); 
                             var qq = JSON.parse(b64_to_utf8(resp3[3].substr(5)));
                             myApp.alert("Cинхронизация с сервером выполнена успешно!","Backup");
                             prakticData.prakticPieces = qq.prakticPieces;
@@ -124,8 +129,8 @@ function getBackup(){
 }
 
 myApp.onPageInit('*', function (page) {     
-    console.log(page.name + ' initialized'); 
-    console.log("--->" + myApp.getCurrentView().activePage.name);
+    //console.log(page.name + ' initialized'); 
+    //console.log("--->" + myApp.getCurrentView().activePage.name);
 });
 
 function onBackKeyDown() {
@@ -163,17 +168,18 @@ $$(document).on('deviceready', function () {
 
 var indexPage = myApp.onPageInit('index', function (page) {
     var prakticCount = 0;
+    
     //формируем первую страницу
-    for (key in localStorage) { 
+    for (var key=0; key < localStorage.length; key++) { 
 
         //читаем данные из хранилища чтобы показать на 1 странице
         // на каждую практику в локалсторадже заводится ОДНА строка
-        if (key != "settings") {
-            
+        if ((localStorage.key(key) != "settings") ){
+
             prakticCount++;
             
-            prakticData=JSON.parse(localStorage.getItem(key));
-
+            prakticData = JSON.parse(localStorage.getItem(localStorage.key(key)));   
+            
             var cBlock = document.createElement("div");
             cBlock.className = "content-block";  
 
@@ -182,7 +188,7 @@ var indexPage = myApp.onPageInit('index', function (page) {
 
             var cBlock2 = document.createElement("div");
             cBlock2.className = "card-header";
-            cBlock2.innerHTML = prakticData.prakticName;
+            cBlock2.innerHTML = "<b>" + prakticData.prakticName + "</b>";
 
             var cBlock3 = document.createElement("div");
             cBlock3.className = "card-content";
@@ -193,7 +199,7 @@ var indexPage = myApp.onPageInit('index', function (page) {
             cBlock4.innerHTML = "<p>Цель = <b>" + prakticData.prakticLength + "</b></p>"
                 + "<p>Выполнено = <b>" + prakticData.prakticSum + "</b></p>"
                 + "<p><a href=\"praktic.html\" class=\"button button-big go-praktic\" id=\"go-praktic\" type=\""
-                + key
+                + localStorage.key(key)
                 + "\">Go!</a></p>";
 
             var cBlock5 = document.createElement("div");
@@ -242,7 +248,8 @@ var indexPage = myApp.onPageInit('index', function (page) {
 
         }
     }
-    // если практик нет ни одной показываем текст
+    
+    // если практик нет ни одной- показываем текст
     if (prakticCount == 0) {
             var cBlock = document.createElement("div");
             cBlock.className = "content-block";  
@@ -268,14 +275,11 @@ var indexPage = myApp.onPageInit('index', function (page) {
             cBlock.appendChild(cBlock1);       
 
             document.getElementById("page-content").appendChild(cBlock);  
-  
     }
-    
     
     //в параметре type лежит ключ к данным в ЛокалСторейдже
     $$('.go-praktic').on('click', function () {        
-        var target = event ? event.target : window.event.srcElement;
-        prakticId = target.type;
+        prakticId = event.target.type;
     });        
     
 });
@@ -285,13 +289,21 @@ myApp.onPageInit('addPraktic', function (page) {
     prakticId = +new Date();
                                                                                              
     $$('.save-data-addPraktic').on('click', function () {
+        
         var formData = myApp.formToJSON('#addPraktic');
-        formData["prakticSum"] = "";
-        formData["prakticPieces"] = ""; 
-        localStorage.setItem(prakticId, JSON.stringify(formData));
-        myApp.alert('Данные сохранены',"addPraktic");
+        
+        if ( formData["prakticName"] > "" 
+            && formData["prakticLength"] > ""
+            && formData["prakticCircleLength"] >"") {
+            
+                formData["prakticSum"] = "";
+                formData["prakticPieces"] = ""; 
+                localStorage.setItem(prakticId, JSON.stringify(formData));
+                myApp.alert('Добавлена практика "' + formData["prakticName"] + '"' ,"addPraktic");
+                
+                location.href="index.html";                
+            }
 
-        location.href="index.html";
     });
 });
 
@@ -311,7 +323,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                 document.getElementById("checkBackup").checked = true;
             }
             document.getElementById("backup-1").hidden = false; 
-            console.log("settings.registered= " +settings.registered);
+            //console.log("settings.registered= " +settings.registered);
     }
     
     //регистрация пошла, запрашиваем пинкод
@@ -323,14 +335,14 @@ var backupPage = myApp.onPageInit('backup', function (page) {
         
             document.getElementById("registered-1").hidden = false;  
             
-            console.log("settings.registered= " +settings.registered);
+            //console.log("settings.registered= " +settings.registered);
     }
     
     //нет регистрации. запрашиваем имейл
     if (settings.registered == "0"){
             document.getElementById("registered-0").hidden = false;  
             
-            console.log("settings.registered= " +settings.registered);
+            //console.log("settings.registered= " +settings.registered);
     }
 
     $$('.registered-0').on('click', function () {
@@ -349,8 +361,8 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                         + "&oper=" + encodeURIComponent(settings.registered) 
                         + "&rnd=" + encodeURIComponent(Math.random());
             
-            console.log("webUri= " + webUri);
-            console.log("request= " + request);
+            //console.log("webUri= " + webUri);
+            //console.log("request= " + request);
             
             // open WEB      
             var x = new XMLHttpRequest();
@@ -358,27 +370,20 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             x.send(request);
             x.onload = function (){
-                console.log(x.responseText);
+                //console.log(x.responseText);
                 resp1 = x.responseText.indexOf("<response>",0);
                 resp2 = x.responseText.indexOf("</response>",resp1+1);
                 
                 resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
-                console.log("resp3-0=" + resp3[0]);
-                console.log("resp3-1=" + resp3[1]);
-                console.log("resp3-2=" + resp3[2]);
+                //console.log("resp3-0=" + resp3[0]);
+                //console.log("resp3-1=" + resp3[1]);
+                //console.log("resp3-2=" + resp3[2]);
                 
-                /*
-                    здесь проверить ответ и действовать соответсвенно
-                    resp3:
-                    0 "oper=0"
-                    1 "a=dongrigorio@yandex.ru"
-                    2 "status=msgsend"
-                */
                 if( (resp3[0] == "oper=0") && (resp3[1] == "a=" + settings.email) ) {
                     if ((resp3[2] == "status=msgsend") ) {
                         settings.registered = "1"; //открываем экран подтверждения ПИН
                         localStorage.setItem("settings", JSON.stringify(settings));
-                        console.log("Переход к экрану подтверждения ПИН"); 
+                        //console.log("Переход к экрану подтверждения ПИН"); 
                         //backupPage.trigger();  
                         mainView.router.refreshPage();
                     };
@@ -386,7 +391,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                         myApp.alert("Email уже зарегистрирован!","Backup");
                         settings.registered = "1"; //открываем экран подтверждения ПИН
                         localStorage.setItem("settings", JSON.stringify(settings));
-                        console.log("email существует в базе, письмо не отправлено"); 
+                        //console.log("email существует в базе, письмо не отправлено"); 
                         mainView.router.refreshPage();
                     };   
                     if ((resp3[3] == "status=msgnosend") ) {
@@ -410,8 +415,8 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                         + "&pin=" + encodeURIComponent(backupForm["pin"])
                         + "&rnd=" + encodeURIComponent(Math.random());
 
-            console.log("webUri= " + webUri);
-            console.log("request= " + request);
+            //console.log("webUri= " + webUri);
+            //console.log("request= " + request);
             
             // open WEB      
             var x = new XMLHttpRequest();
@@ -419,17 +424,12 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             x.send(request);
             x.onload = function (){
-                console.log(x.responseText);
+                //console.log(x.responseText);
                 var resp1 = x.responseText.indexOf("<response>",0);
                 var resp2 = x.responseText.indexOf("</response>",resp1+1);
                 
                 var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
-                console.log(resp3);
-                /*
-                    0:"oper=1"
-                    1:"a=dongrigorio@yandex.ru"
-                    2:"status=regok"
-                */
+                //console.log(resp3);
 
                 if( (resp3[0] == "oper=1") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=regok") ) {
                     settings.registered = "3"; 
@@ -437,10 +437,10 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                     localStorage.setItem("settings", JSON.stringify(settings));
                     mainView.router.refreshPage();
                     myApp.alert("Вы зарегистрированы!","Backup");
-                    console.log("Переход к экрану активации бэкапа"); 
+                    //console.log("Переход к экрану активации бэкапа"); 
                 } else {
                                         
-                    console.log("Ответ сервера не верен, переход к экрану повтроного ввода ПИН");
+                    //console.log("Ответ сервера не верен, переход к экрану повтроного ввода ПИН");
                     
                     myApp.confirm("Ошибка при регистрации! Повторить ввод пин-кода?","Backup", function () {
                         settings.registered = "1";
@@ -476,7 +476,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             (document.backupForm1.checkBackup.checked )?  (settings.checkBackup="1") : (settings.checkBackup="0");
             localStorage.setItem("settings", JSON.stringify(settings));
 
-            console.log("checkBackup = " + settings.checkBackup); 
+            //console.log("checkBackup = " + settings.checkBackup); 
         }
     });
 
@@ -504,8 +504,8 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                         + "&pin=" + encodeURIComponent(settings.pin)
                         + "&rnd=" + encodeURIComponent(Math.random());
             
-            console.log("webUri= " + webUri);
-            console.log("request= " + request);
+            //console.log("webUri= " + webUri);
+            //console.log("request= " + request);
             
             // open WEB      
             var x = new XMLHttpRequest();
@@ -513,12 +513,12 @@ var backupPage = myApp.onPageInit('backup', function (page) {
             x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             x.send(request);
             x.onload = function (){
-                console.log(x.responseText);
+                //console.log(x.responseText);
                 var resp1 = x.responseText.indexOf("<response>",0);
                 var resp2 = x.responseText.indexOf("</response>",resp1+1);
                 
                 var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
-                console.log(resp3);
+                //console.log(resp3);
                 
                 var qaz = JSON.parse(resp3[2].substr(5));
                 
@@ -533,9 +533,9 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                       for (k in qaz){
                         wsx = JSON.parse(qaz[k]);
                         key = wsx["id"];
-                        console.log(key);
+                        //console.log(key);
                         data = b64_to_utf8(wsx["data"]);
-                        console.log(data);
+                        //console.log(data);
                         localStorage.setItem(key, data);
                     }
                 } 
@@ -549,7 +549,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
 });
 
 var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
-    console.log("= "+prakticId + " = prakticId");
+    //console.log("prakticId = " + prakticId);
     var prakticData = JSON.parse(localStorage[prakticId]);
     var date = new Date();
     var my_div;
@@ -557,23 +557,17 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     var formData;
     var prevInput = 0;
     
-    //document.getElementById("card-praktic").innerHTML = "<b>" + prakticData["prakticName"] +"</b>";     
-    
     var optionsDate = {
-     // era: 'long',
-      year: '2-digit',
+       year: '2-digit',
       month: 'short',
-      day: '2-digit'
-      //weekday: 'long',
-      //timezone: 'UTC',
-      //hour: '2-digit',
-      //minute: '2-digit',
-      //second: '2-digit'
+        day: '2-digit'
     };
     piecePraktic=[]; 
     pieceDate=[];
     
     document.getElementById("prakticName").innerHTML = prakticData["prakticName"];
+    document.getElementById("praktic-result").innerHTML = (prakticData["prakticSum"] == "") ? "0" : prakticData["prakticSum"];
+    document.getElementById("praktic-up").innerHTML = prakticData["prakticLength"] - prakticData["prakticSum"];
     
     if (prakticData.prakticPieces.length > 0){
         
@@ -590,13 +584,15 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                 series1[i] = +piecePraktic[i];
                 k += +piecePraktic[i];
         }
-
+        
+        //не будем показывать
+        /*
         var str = "<table border=0 cellpadding = 5>";
         str += "<tr valign = middle><td> <b>" + prakticData["prakticCircleLength"] + "</b></td><td> длина одного круга</td></tr>";
         str += "<tr valign = middle><td> <b>" + ((+k/(arr.length-1))^0) + "</b></td><td> cреднее количеcтво повторений за одну сессию </td></tr>";
         str += "<tr valign = middle><td> <b>" + ( (+prakticData.prakticLength - +prakticData.prakticSum)/(+k/(arr.length-1))^0  ) + "</b></td><td> сессий потребуется для достижения цели</td></tr>"; 
         str += "</table>";
-        
+        */
         date.setTime(+pieceDate[arr.length-1]- +pieceDate[0] + 5*1000*60*60*24);
         var periodDate = (date/ 24 / 60 / 60 / 1000 )^0;
         
@@ -609,11 +605,10 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
             axisY: {
                offset: 70
             }
-
         });
-
-        my_div = document.getElementById("circle-length"); 
-        my_div.innerHTML = str;
+        
+        //не будем показывать
+        //document.getElementById("circle-length").innerHTML = str;
 
         mainView.router.refreshPage();        
 
@@ -682,8 +677,8 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                             + "&time=" + encodeURIComponent(+dateLastPiece ) 
                             + "&rnd=" + encodeURIComponent( Math.random() );
 
-                console.log("webUri= " + webUri);
-                console.log("request= " + request);
+                //console.log("webUri= " + webUri);
+                //console.log("request= " + request);
 
                 // open WEB      
                 var x = new XMLHttpRequest();
@@ -691,21 +686,16 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                 x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 x.send(request);
                 x.onload = function (){
-                    console.log(x.responseText);
+                    //console.log(x.responseText);
                     var resp1 = x.responseText.indexOf("<response>",0);
                     var resp2 = x.responseText.indexOf("</response>",resp1+1);
 
                     var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
-                    console.log(resp3);
-                    /*
-                        0:"oper=1"
-                        1:"a=dongrigorio@yandex.ru"
-                        2:"status=regok"
-                    */
+                    //console.log(resp3);
 
                     if( (resp3[0] == "oper=22") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosaved") ) {
                         myApp.alert("Изменения не сохранены на сервере. Обновите настройки вашего аккаунта " + settings.email,"Backup");
-                        console.log("Данные об изменении практики не сохранились на сервере"); 
+                        //console.log("Данные об изменении практики не сохранились на сервере"); 
                     } 
                 }
             }
@@ -726,12 +716,12 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
 
                     prakticData.prakticSum = +prakticData.prakticSum - +piecePraktic[piecePraktic.length-1];
 
-                    console.log("1:  piecePraktic.length =" + piecePraktic.length); 
+                    //console.log("1:  piecePraktic.length =" + piecePraktic.length); 
 
                     piecePraktic.splice(piecePraktic.length-1, 1);
                     pieceDate.splice(pieceDate.length-1, 1);  
 
-                    console.log("2:  DEL piecePraktic.length =" + piecePraktic.length); 
+                    //console.log("2:  DEL piecePraktic.length =" + piecePraktic.length); 
 
                     prakticData.prakticPieces = "";
 
@@ -745,7 +735,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                     }
                     //отрезаем последнее равно
                     prakticData.prakticPieces = prakticData.prakticPieces.substring(0,  prakticData.prakticPieces.length-1);
-                    console.log("prakticData.prakticPieces =" + prakticData.prakticPieces);
+                    //console.log("prakticData.prakticPieces =" + prakticData.prakticPieces);
                     
                     //--------------------------------------
                     localStorage.setItem(prakticId, JSON.stringify(prakticData));
@@ -761,8 +751,8 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                                     + "&time=" + encodeURIComponent(+pieceDate[pieceDate.length-1] ) 
                                     + "&rnd=" + encodeURIComponent( Math.random() );
 
-                        console.log("webUri= " + webUri);
-                        console.log("request= " + request);
+                        //console.log("webUri= " + webUri);
+                        //console.log("request= " + request);
 
                         // open WEB      
                         var x = new XMLHttpRequest();
@@ -770,21 +760,16 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                         x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                         x.send(request);
                         x.onload = function (){
-                            console.log(x.responseText);
+                            //console.log(x.responseText);
                             var resp1 = x.responseText.indexOf("<response>",0);
                             var resp2 = x.responseText.indexOf("</response>",resp1+1);
 
                             var resp3 = x.responseText.substr(resp1+10,resp2-resp1-10).split("&")
-                            console.log(resp3);
-                            /*
-                                0:"oper=1"
-                                1:"a=dongrigorio@yandex.ru"
-                                2:"status=regok"
-                            */
+                            //console.log(resp3);
 
                             if( (resp3[0] == "oper=22") && (resp3[1] == "a=" + settings.email) && (resp3[2] == "status=datanosaved") ) {
                                 myApp.alert("Изменения не сохраены на сервере. Проверьте ваш аккаунт " + settings.email,"Backup");
-                                console.log("Данные об изменении практики не сохранились на сервере"); 
+                                //console.log("Данные об изменении практики не сохранились на сервере"); 
                             } 
                         }
                     }
@@ -822,7 +807,7 @@ myApp.onPageInit('editPraktic', function (page) {
 
         localStorage.setItem(prakticId, JSON.stringify(prakticData));
 
-        myApp.alert("Данные сохранены", "editPraktic");
+        //myApp.alert("Данные сохранены", "editPraktic");
 
         mainView.router.back({
             pageName: "praktic"
