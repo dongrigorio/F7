@@ -127,8 +127,9 @@ function getBackup(){
 }
 
 myApp.onPageInit('*', function (page) {     
-    //console.log(page.name + ' initialized'); 
-    //console.log("--->" + myApp.getCurrentView().activePage.name);
+    console.log(page.name + ' initialized'); 
+    console.log("--->" + myApp.getCurrentView().activePage.name);
+    //mainView.router.load({url:'index.html'});
 });
 
 function onBackKeyDown() {
@@ -161,12 +162,13 @@ $$(document).on('deviceready', function () {
     console.log("Device is ready!");
     getSettings();
     getBackup();
-    mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
+    mainView.router.reloadPage('index.html');     //эквивалент  = 
+    mainView.router.refreshPage();
 });
 
 var indexPage = myApp.onPageInit('index', function (page) {
     var prakticCount = 0;
-    myApp.alert("localStorage.length=" + localStorage.length);
+    //myApp.alert("localStorage.length=" + localStorage.length);
     
     //формируем первую страницу
     for (var key=0; key < localStorage.length; key++) { 
@@ -524,12 +526,14 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                 var data, key, wsx, k = [];
                 
                 if( (resp3[0] == "oper=10") && (resp3[1] == "a=" + settings.email) && (resp3[3] == "status=alldata") ) {
+
+                    //for (var k=0; k < localStorage.length; k++) {
                     
-                    for (k in localStorage) { //!!!
+                    for (k in localStorage) { //!!!  
                         if (k != "settings")
                             localStorage.removeItem(k);                        
                     }
-                      for (k in qaz){
+                    for (k in qaz){
                         wsx = JSON.parse(qaz[k]);
                         key = wsx["id"];
                         //console.log(key);
