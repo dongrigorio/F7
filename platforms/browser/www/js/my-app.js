@@ -129,7 +129,6 @@ function getBackup(){
 myApp.onPageInit('*', function (page) {     
     //console.log(page.name + ' initialized'); 
     //console.log("--->" + myApp.getCurrentView().activePage.name);
-    mainView.router.reloadPage('index.html');
 });
 
 function onBackKeyDown() {
@@ -167,6 +166,7 @@ $$(document).on('deviceready', function () {
 
 var indexPage = myApp.onPageInit('index', function (page) {
     var prakticCount = 0;
+    myApp.alert("localStorage.length=" + localStorage.length);
     
     //формируем первую страницу
     for (var key=0; key < localStorage.length; key++) { 
@@ -525,7 +525,7 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                 
                 if( (resp3[0] == "oper=10") && (resp3[1] == "a=" + settings.email) && (resp3[3] == "status=alldata") ) {
                     
-                    for (k in localStorage) {
+                    for (k in localStorage) { //!!!
                         if (k != "settings")
                             localStorage.removeItem(k);                        
                     }
