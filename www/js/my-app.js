@@ -158,7 +158,7 @@ function onBackKeyDown() {
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
     document.addEventListener("backbutton", onBackKeyDown, false);
-    //console.log("Device is ready!");
+    console.log("Device is ready!");
     getSettings();
     getBackup();
     mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();

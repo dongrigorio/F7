@@ -158,7 +158,7 @@ function onBackKeyDown() {
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
     document.addEventListener("backbutton", onBackKeyDown, false);
-    //console.log("Device is ready!");
+    console.log("Device is ready!");
     getSettings();
     getBackup();
     mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
@@ -621,15 +621,14 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     
     $$('.dpp').on('keyup keydown', function () { //keyup keydown change dataPrakticPieces
         //console.log("vent.keyCode= " + event.keyCode);
-        if(event.keyCode != 13) {
-            formData = myApp.formToJSON('#dataPraktic'); 
-            var resInput = +formData['dpp'];
-            sumSession = +sumSession - +prevInput + +resInput;
+    
+        formData = myApp.formToJSON('#dataPraktic'); 
+        var resInput = +formData['dpp'];
+        sumSession = +sumSession - +prevInput + +resInput;
 
-            if (sumSession<=0) sumSession = 0;
-            prevInput = resInput;
-            document.getElementById("session-result").innerHTML = +sumSession;            
-        }
+        if (sumSession<=0) sumSession = 0;
+        prevInput = resInput;
+        document.getElementById("session-result").innerHTML = +sumSession;            
     });   
     
     $$('.inc-result').on('click', function () {
