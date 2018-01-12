@@ -21,8 +21,6 @@ var settings ={};
 var key;
 var arr= [];
 
-
-
 prakticData["prakticPieces"] = 0;
 prakticData["prakticSum"] = 0;
 
@@ -160,7 +158,7 @@ function onBackKeyDown() {
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
     document.addEventListener("backbutton", onBackKeyDown, false);
-    console.log("Device is ready!");
+    //console.log("Device is ready!");
     getSettings();
     getBackup();
     mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
@@ -566,9 +564,9 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     pieceDate=[];
     
     document.getElementById("prakticName").innerHTML = prakticData["prakticName"];
-    document.getElementById("praktic-result").innerHTML = (prakticData["prakticSum"] == "") ? "0" : prakticData["prakticSum"];
-    document.getElementById("praktic-up").innerHTML = prakticData["prakticLength"] - prakticData["prakticSum"];
-    
+    document.getElementById("praktic-result").innerHTML = (prakticData["prakticSum"] == "") ? "0" : +prakticData["prakticSum"];
+    document.getElementById("praktic-up").innerHTML = +prakticData["prakticLength"] - +prakticData["prakticSum"];
+
     if (prakticData.prakticPieces.length > 0){
         
         var arr = prakticData.prakticPieces.split("=");
@@ -593,6 +591,8 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
         str += "<tr valign = middle><td> <b>" + ( (+prakticData.prakticLength - +prakticData.prakticSum)/(+k/(arr.length-1))^0  ) + "</b></td><td> сессий потребуется для достижения цели</td></tr>"; 
         str += "</table>";
         */
+        
+    
         date.setTime(+pieceDate[arr.length-1]- +pieceDate[0] + 5*1000*60*60*24);
         var periodDate = (date/ 24 / 60 / 60 / 1000 )^0;
         
@@ -616,15 +616,20 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
         document.getElementById("ct-chart-day").innerHTML = "Добавьте первую сессию, и статистика начнет считаться.";
     } 
 
-    document.getElementById("cirleShow").innerHTML = "Добавить круги (" + prakticData["prakticCircleLength"] + "):";   
+    document.getElementById("cirleShow").innerHTML = "Добавить круги (" + prakticData["prakticCircleLength"] + "):";
     
-     $$('.dataPrakticPieces').on('keyup keydown change', function () {
-        formData = myApp.formToJSON('#dataPraktic'); 
-        var resInput = +formData['dataPrakticPieces'];
-        sumSession = sumSession - prevInput + resInput;
-        if (sumSession<=0) sumSession = 0;
-        prevInput = resInput;
-        document.getElementById("session-result").innerHTML = +sumSession;            
+    
+    $$('.dpp').on('keyup keydown', function () { //keyup keydown change dataPrakticPieces
+        //console.log("vent.keyCode= " + event.keyCode);
+        if(event.keyCode != 13) {
+            formData = myApp.formToJSON('#dataPraktic'); 
+            var resInput = +formData['dpp'];
+            sumSession = +sumSession - +prevInput + +resInput;
+
+            if (sumSession<=0) sumSession = 0;
+            prevInput = resInput;
+            document.getElementById("session-result").innerHTML = +sumSession;            
+        }
     });   
     
     $$('.inc-result').on('click', function () {
@@ -638,9 +643,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
         }
         document.getElementById("session-result").innerHTML = sumSession;  
     });    
-    
-    
-    
+        
     $$('.save-data-praktic').on('click', function () {
 
         if (sumSession>0) {
@@ -707,7 +710,7 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
     $$('.edit-data').on('click', function () {
         myApp.closeModal();
     });   
-    
+
     
     $$('.delete-last-data').on('click', function () {
             myApp.closeModal();
@@ -776,15 +779,13 @@ var pageInitPraktic = myApp.onPageInit('praktic', function (page) {
                     //---------------------------------------
                     mainView.router.refreshPage();
                 });
-
         } else {
             myApp.alert("Нет данных для удаления", "");
             mainView.router.refreshPage();   
-        }
-        
-    });
-    
+        }     
+    }); 
 });
+
 
 myApp.onPageInit('editPraktic', function (page) {
     
