@@ -8,13 +8,13 @@
     },
     "installed_plugins": {
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
+            "PACKAGE_NAME": "com.phonegap.dongrigorio.mypraktic"
         },
         "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
+            "PACKAGE_NAME": "com.phonegap.dongrigorio.mypraktic"
         },
         "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
+            "PACKAGE_NAME": "com.phonegap.dongrigorio.mypraktic"
         }
     },
     "dependent_plugins": {},
