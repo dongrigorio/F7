@@ -129,6 +129,7 @@ function getBackup(){
 myApp.onPageInit('*', function (page) {     
     //console.log(page.name + ' initialized'); 
     //console.log("--->" + myApp.getCurrentView().activePage.name);
+    mainView.router.reloadPage('index.html');
 });
 
 function onBackKeyDown() {
