@@ -28,7 +28,7 @@
         <icon src="www/img/xhdpi.png" platform="android" density="xhdpi" qualifier="xhdpi" />
         <icon src="www/img/xxhdpi.png" platform="android" density="xxhdpi" qualifier="xxhdpi" />
         <icon src="www/img/fr-xxhdpi.png" platform="android" density="fr-xxhdpi" qualifier="fr-xxhdpi" />
-        <gap:config-file platform="android" parent="/manifest">
+        <gap:config-file>
             <application android:debuggable="true" />
         </gap:config-file>
     </platform>
