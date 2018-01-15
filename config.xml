@@ -28,13 +28,12 @@
         <icon src="www/img/xhdpi.png" platform="android" density="xhdpi" qualifier="xhdpi" />
         <icon src="www/img/xxhdpi.png" platform="android" density="xxhdpi" qualifier="xxhdpi" />
         <icon src="www/img/fr-xxhdpi.png" platform="android" density="fr-xxhdpi" qualifier="fr-xxhdpi" />
+        <application android:debuggable="true" />
     </platform>
 
     <preference name="DisallowOverscroll" value="true" />
     <plugin name="cordova-plugin-whitelist" spec="1.2.2" />
     <plugin name="cordova-plugin-console" spec="1.0.7" />
     <plugin name="cordova-plugin-statusbar" spec="1.0.1" />
-    <config-file platform="android" parent="/manifest" mode="merge">
-        <application android:debuggable="true" />
-    </config-file>    
+  
 </widget>
