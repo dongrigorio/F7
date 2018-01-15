@@ -538,8 +538,6 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                 var data, key, wsx, k = [];
                 
                 if( (resp3[0] == "oper=10") && (resp3[1] == "a=" + settings.email) && (resp3[3] == "status=alldata") ) {
-
-                    //for (var k=0; k < localStorage.length; k++) {
                     
                     for (var i=0; i < localStorage.length; i++) { 
                         var k = localStorage.key(i);
@@ -555,16 +553,16 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                         //console.log(data);
                         localStorage.setItem(key, data);
                     }
-                } 
+                    myApp.alert("Данные с сервера загружены","Backup");
+
+                } else {
+                    myApp.alert("Ошибка получения данных","Backup");
+                    //mainView.router.refreshPage();                    
+                }
+ 
             } 
-            myApp.alert("Данные с сервера загружены","Backup");
             mainView.router.refreshPage();
-            location.href="index.html";
-            //mainView.router.load({url:'index.html'});
-             //mainView.router.refreshPage();
-            //mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
-            //myApp.alert("reloadPage","reloadPage");
-         
+            //location.href="index.html";         
              
         },function () {
             mainView.router.refreshPage();
