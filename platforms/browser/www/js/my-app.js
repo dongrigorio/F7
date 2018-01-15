@@ -61,7 +61,11 @@ function getSettings(){
 //------------------Чтение бэкапа при старте----------------------------
 function getBackup(){
     var noacc = "";
-    for (key in localStorage) { 
+    
+    for (var i=0; i < localStorage.length; i++) { 
+    //for (key in localStorage) { // key === localStorage.key(key)
+        var key = localStorage.key(i);
+        
         if (key != "settings") {
             prakticData=JSON.parse(localStorage.getItem(key));
             if (settings.checkBackup == "1") {
@@ -123,7 +127,8 @@ function getBackup(){
             }
         }
     }
-    //------------------бэкап при старте----------------------------    
+    //------------------бэкап при старте---------------------------- 
+    
 }
 
 myApp.onPageInit('*', function (page) {     
@@ -151,7 +156,7 @@ function onBackKeyDown() {
             break;
             
         default:
-            mainView.router.load({url:'index.html'});
+            mainView.router.load({url:'index.html'});       
             break;
     }  
 }
@@ -161,11 +166,16 @@ $$(document).on('deviceready', function () {
     document.addEventListener("backbutton", onBackKeyDown, false);
     console.log("Device is ready!");
     getSettings();
+    //myApp.alert("getSettings","getSettings");
+    
     getBackup();
+   // myApp.alert("getBackup","getBackup");
+    
     //location.href="index.html";
     //mainView.router.load({url:'index.html'});
-    //mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
-    mainView.router.refreshPage();
+    mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
+    //myApp.alert("reloadPage","reloadPage");
+    //mainView.router.refreshPage();
 });
 
 var indexPage = myApp.onPageInit('index', function (page) {
@@ -531,10 +541,12 @@ var backupPage = myApp.onPageInit('backup', function (page) {
 
                     //for (var k=0; k < localStorage.length; k++) {
                     
-                    for (k in localStorage) { //!!!  
+                    for (var i=0; i < localStorage.length; i++) { 
+                        var k = localStorage.key(i);
                         if (k != "settings")
                             localStorage.removeItem(k);                        
                     }
+                    
                     for (k in qaz){
                         wsx = JSON.parse(qaz[k]);
                         key = wsx["id"];
@@ -544,8 +556,16 @@ var backupPage = myApp.onPageInit('backup', function (page) {
                         localStorage.setItem(key, data);
                     }
                 } 
-            }            
+            } 
+            myApp.alert("Данные с сервера загружены","Backup");
             mainView.router.refreshPage();
+            location.href="index.html";
+            //mainView.router.load({url:'index.html'});
+             //mainView.router.refreshPage();
+            //mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
+            //myApp.alert("reloadPage","reloadPage");
+         
+             
         },function () {
             mainView.router.refreshPage();
         });       
