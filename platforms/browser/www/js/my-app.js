@@ -138,7 +138,8 @@ function onBackKeyDown() {
             myApp.confirm("Закрыть программу?","Моя Практика", function () {
                     navigator.app.exitApp();
                 },function () {
-                    mainView.router.load({url:'index.html'});
+                    //mainView.router.load({url:'index.html'});
+                    mainView.router.reloadPage('index.html');    
             });    
 
             break;
