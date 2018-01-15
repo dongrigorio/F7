@@ -38,7 +38,5 @@
   
 </widget>
 <config-file platform="android" parent="/manifest" mode="merge">
-
     <application android:debuggable="true"/>
-
 </config-file>
