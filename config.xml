@@ -37,6 +37,6 @@
     <plugin name="cordova-plugin-statusbar" spec="1.0.1" />
   
 </widget>
-<config-file platform="android" parent="/manifest" mode="merge">
-    <application android:debuggable="true"/>
-</config-file>
+<gap:config-file platform="android" parent="/manifest">
+ <application android:debuggable="true" />
+</gap:config-file>
