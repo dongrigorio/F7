@@ -129,7 +129,6 @@ function getBackup(){
 myApp.onPageInit('*', function (page) {     
     console.log(page.name + ' initialized'); 
     console.log("--->" + myApp.getCurrentView().activePage.name);
-    //mainView.router.load({url:'index.html'});
 });
 
 function onBackKeyDown() {
@@ -163,7 +162,10 @@ $$(document).on('deviceready', function () {
     console.log("Device is ready!");
     getSettings();
     getBackup();
-    mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
+    //location.href="index.html";
+    //mainView.router.load({url:'index.html'});
+    //mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
+    mainView.router.refreshPage();
 });
 
 var indexPage = myApp.onPageInit('index', function (page) {
