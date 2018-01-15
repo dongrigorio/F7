@@ -35,10 +35,4 @@
     <plugin name="cordova-plugin-console" spec="1.0.7" />
     <plugin name="cordova-plugin-statusbar" spec="1.0.1" />
     
-    <gap:config-file platform="android" parent="/manifest">
-            <application android:debuggable="true"/>
-    </gap:config-file>
-    
-    
-    
 </widget>

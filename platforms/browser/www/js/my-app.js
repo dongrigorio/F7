@@ -162,8 +162,7 @@ $$(document).on('deviceready', function () {
     console.log("Device is ready!");
     getSettings();
     getBackup();
-    mainView.router.reloadPage('index.html');     //эквивалент  = 
-    mainView.router.refreshPage();
+    mainView.router.reloadPage('index.html');     //эквивалент  = mainView.router.refreshPage();
 });
 
 var indexPage = myApp.onPageInit('index', function (page) {
